@@ -107,6 +107,20 @@ public class TypingRace
         }
 
         // Print the winner's name here
+        Typist winner = seat1Typist;
+
+        if (seat2Typist.getProgress() > winner.getProgress())
+        {
+            winner = seat2Typist;
+        }
+
+        if (seat3Typist.getProgress() > winner.getProgress())
+        {
+            winner = seat3Typist;
+        }
+
+        System.out.println("The winner is: " + winner.getName() + "!");
+        System.out.println("Final accuracy: " + winner.getAccuracy());
     }
 
     /**
