@@ -7,7 +7,7 @@
  * It is not optional. Good luck.
  *
  * @author Inaaya Rahim
- * @version 21-Apr-2026
+ * @version 1
  */
 public class Typist
 {
@@ -56,7 +56,7 @@ public class Typist
      */
     public void burnOut(int turns)
     {
-
+        
     }
 
     /**
@@ -76,7 +76,7 @@ public class Typist
      */
     public double getAccuracy()
     {
-        return 0.0; // placeholder - replace with correct implementation
+        return accuracy;
     }
 
     /**
@@ -88,7 +88,7 @@ public class Typist
      */
     public int getProgress()
     {
-        return 0; // placeholder - replace with correct implementation
+        return progress;
     }
 
     /**
@@ -98,7 +98,7 @@ public class Typist
      */
     public String getName()
     {
-        return ""; // placeholder - replace with correct implementation
+        return name;
     }
 
     /**
@@ -108,7 +108,7 @@ public class Typist
      */
     public char getSymbol()
     {
-        return ' '; // placeholder - replace with correct implementation
+        return symbol;
     }
 
     /**
@@ -119,7 +119,7 @@ public class Typist
      */
     public int getBurnoutTurnsRemaining()
     {
-        return 0; // placeholder - replace with correct implementation
+        return burnoutTurnsRemaining;
     }
 
     /**
