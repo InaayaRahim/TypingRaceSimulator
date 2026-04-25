@@ -82,6 +82,7 @@ public class TypingRace
         // (Ty was in a hurry here)
         seat1Typist.resetToStart();
         seat2Typist.resetToStart();
+        seat3Typist.resetToStart(); 
 
         while (!finished)
         {
@@ -105,7 +106,7 @@ public class TypingRace
             } catch (Exception e) {}
         }
 
-        // TODO (Task 2a): Print the winner's name here
+        // Print the winner's name here
     }
 
     /**
