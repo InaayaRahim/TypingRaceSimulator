@@ -80,16 +80,28 @@ public class TypingRace
 
         // Reset all typists to the start of the passage
         // (Ty was in a hurry here)
-        seat1Typist.resetToStart();
-        seat2Typist.resetToStart();
-        seat3Typist.resetToStart(); 
+        if (seat1Typist != null) {
+            seat1Typist.resetToStart();
+        }
+        if (seat2Typist != null) {
+            seat2Typist.resetToStart();
+        }
+        if (seat3Typist != null) {
+            seat3Typist.resetToStart();
+        }
 
         while (!finished)
         {
             // Advance each typist by one turn
-            advanceTypist(seat1Typist);
-            advanceTypist(seat2Typist);
-            advanceTypist(seat3Typist);
+            if (seat1Typist != null) {
+                advanceTypist(seat1Typist);
+            }
+            if (seat2Typist != null) {
+                advanceTypist(seat2Typist);
+            }
+            if (seat3Typist != null) {
+                advanceTypist(seat3Typist);
+            }
 
             // Print the current state of the race
             printRace();
