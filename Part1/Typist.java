@@ -137,7 +137,9 @@ public class Typist
      */
     public void resetToStart()
     {
-
+        progress = 0;
+        burntOut = false;
+        burnoutTurnsRemaining = 0;
     }
 
     /**
@@ -147,7 +149,7 @@ public class Typist
      */
     public boolean isBurntOut()
     {
-        return false; // placeholder - replace with correct implementation
+        return burntOut;
     }
 
     /**
@@ -202,7 +204,7 @@ public class Typist
      */
     public void setSymbol(char newSymbol)
     {
-
+        symbol = newSymbol;
     }
 
 }
