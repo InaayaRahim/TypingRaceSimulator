@@ -9,8 +9,8 @@ import java.lang.Math;
  * two-finger technique". He assured us the code was "basically done".
  * We have found evidence to the contrary.
  *
- * @author TyPosaurus
- * @version 0.7 (the other 0.3 is left as an exercise for the reader)
+ * @author Inaaya
+ * @version 1.0
  */
 public class TypingRace
 {
@@ -24,6 +24,11 @@ public class TypingRace
     private static final double MISTYPE_BASE_CHANCE = 0.3;
     private static final int    SLIDE_BACK_AMOUNT   = 2;
     private static final int    BURNOUT_DURATION     = 3;
+
+    // Track "just mistyped" state per seat to show the [<] marker in the printout
+    private boolean seat1Mistyped;
+    private boolean seat2Mistyped;
+    private boolean seat3Mistyped;
 
     /**
      * Constructor for objects of class TypingRace.
@@ -92,6 +97,11 @@ public class TypingRace
 
         while (!finished)
         {
+            // Reset "just mistyped" state at the start of each turn
+            seat1Mistyped = false;
+            seat2Mistyped = false;
+            seat3Mistyped = false;
+
             // Advance each typist by one turn
             if (seat1Typist != null) {
                 advanceTypist(seat1Typist);
@@ -178,6 +188,17 @@ public class TypingRace
         if (Math.random() < (1 - theTypist.getAccuracy()) * MISTYPE_BASE_CHANCE)
         {
             theTypist.slideBack(SLIDE_BACK_AMOUNT);
+
+            // Set the "just mistyped" flag for this typist's seat
+            if (theTypist == seat1Typist) {
+                seat1Mistyped = true;
+            }
+            else if (theTypist == seat2Typist) {
+                seat2Mistyped = true;
+            }
+            else if (theTypist == seat3Typist) {
+                seat3Mistyped = true;
+            }
         }
 
         // Burnout check — pushing too hard increases burnout risk
@@ -213,21 +234,21 @@ public class TypingRace
         System.out.println();
 
         if (seat1Typist != null) {
-            printSeat(seat1Typist);
+            printSeat(seat1Typist, seat1Mistyped);
         }
         else {
             System.out.println("| EMPTY |");
         }
 
         if (seat2Typist != null) {
-            printSeat(seat2Typist);
+            printSeat(seat2Typist, seat2Mistyped);
         }
         else {
             System.out.println("| EMPTY |");
         }
 
         if (seat3Typist != null) {
-            printSeat(seat3Typist);
+            printSeat(seat3Typist, seat3Mistyped);
         }
         else {
             System.out.println("| EMPTY |");
@@ -250,7 +271,7 @@ public class TypingRace
      *
      * @param theTypist the typist whose lane to print
      */
-    private void printSeat(Typist theTypist)
+    private void printSeat(Typist theTypist, boolean justMistyped)
     {
         int spacesBefore = theTypist.getProgress();
         int spacesAfter  = passageLength - theTypist.getProgress();
@@ -261,12 +282,21 @@ public class TypingRace
         // Always show the typist's symbol so they can be identified on screen.
         // Append ~ when burnt out so the state is visible without hiding identity.
         System.out.print(theTypist.getSymbol());
+
         if (theTypist.isBurntOut())
         {
             System.out.print('~');
 
             if (spacesAfter > 0) {
                 spacesAfter--; // symbol + ~ together take two characters
+            }
+        }
+
+        // Show the [<] marker if this typist just mistyped on this turn
+        if (justMistyped) {
+            System.out.print("<");
+            if (spacesAfter > 0) {
+                spacesAfter--; // symbol + < together take two characters
             }
         }
 
@@ -286,6 +316,8 @@ public class TypingRace
             System.out.print(theTypist.getName()
                 + " (Accuracy: " + theTypist.getAccuracy() + ")");
         }
+
+        System.out.println();
     }
 
     /**
