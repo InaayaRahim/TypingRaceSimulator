@@ -137,8 +137,13 @@ public class TypingRace
             winner = seat3Typist;
         }
 
-        System.out.println("The winner is: " + winner.getName() + "!");
-        System.out.println("Final accuracy: " + winner.getAccuracy());
+        if (winner != null) {
+            System.out.println("The winner is: " + winner.getName() + "!");
+            System.out.println("Final accuracy: " + winner.getAccuracy());
+        }
+        else {
+            System.out.println("No winner — no typists were seated.");
+        }
     }
 
     /**
@@ -230,7 +235,7 @@ public class TypingRace
 
         multiplePrint('=', passageLength + 3);
         System.out.println();
-        System.out.println("  [zz] = burnt out    [<] = just mistyped");
+        System.out.println("  [~] = burnt out    [<] = just mistyped");
     }
 
     /**
@@ -259,7 +264,10 @@ public class TypingRace
         if (theTypist.isBurntOut())
         {
             System.out.print('~');
-            spacesAfter--; // symbol + ~ together take two characters
+
+            if (spacesAfter > 0) {
+                spacesAfter--; // symbol + ~ together take two characters
+            }
         }
 
         multiplePrint(' ', spacesAfter);
