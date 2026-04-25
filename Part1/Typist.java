@@ -37,7 +37,12 @@ public class Typist
      */
     public Typist(char typistSymbol, String typistName, double typistAccuracy)
     {
-
+        this.symbol = typistSymbol;
+        this.name = typistName;
+        this.progress = 0;
+        this.burntOut = false;
+        this.burnoutTurnsRemaining = 0;
+        setAccuracy(typistAccuracy); // use the setter to ensure accuracy is within bounds
     }
 
 
