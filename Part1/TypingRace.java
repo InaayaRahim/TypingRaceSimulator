@@ -107,7 +107,9 @@ public class TypingRace
             printRace();
 
             // Check if any typist has finished the passage
-            if ( raceFinishedBy(seat1Typist) || raceFinishedBy(seat2Typist) || raceFinishedBy(seat3Typist) )
+            if ((seat1Typist != null && raceFinishedBy(seat1Typist)) ||
+                (seat2Typist != null && raceFinishedBy(seat2Typist)) ||
+                (seat3Typist != null && raceFinishedBy(seat3Typist)))
             {
                 finished = true;
             }
