@@ -121,14 +121,18 @@ public class TypingRace
         }
 
         // Print the winner's name here
-        Typist winner = seat1Typist;
+        Typist winner = null;
 
-        if (seat2Typist.getProgress() > winner.getProgress())
+        if (seat1Typist != null) {
+            winner = seat1Typist;
+        }
+
+        if (seat2Typist != null && (winner == null || seat2Typist.getProgress() > winner.getProgress()))
         {
             winner = seat2Typist;
         }
 
-        if (seat3Typist.getProgress() > winner.getProgress())
+        if (seat3Typist != null && (winner == null || seat3Typist.getProgress() > winner.getProgress()))
         {
             winner = seat3Typist;
         }
@@ -203,14 +207,26 @@ public class TypingRace
         multiplePrint('=', passageLength + 3);
         System.out.println();
 
-        printSeat(seat1Typist);
-        System.out.println();
+        if (seat1Typist != null) {
+            printSeat(seat1Typist);
+        }
+        else {
+            System.out.println("| EMPTY |");
+        }
 
-        printSeat(seat2Typist);
-        System.out.println();
+        if (seat2Typist != null) {
+            printSeat(seat2Typist);
+        }
+        else {
+            System.out.println("| EMPTY |");
+        }
 
-        printSeat(seat3Typist);
-        System.out.println();
+        if (seat3Typist != null) {
+            printSeat(seat3Typist);
+        }
+        else {
+            System.out.println("| EMPTY |");
+        }
 
         multiplePrint('=', passageLength + 3);
         System.out.println();
