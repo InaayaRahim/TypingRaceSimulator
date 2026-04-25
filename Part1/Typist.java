@@ -147,7 +147,10 @@ public class Typist
      */
     public void typeCharacter()
     {
-
+        if (!burntOut)
+        {
+            progress++;
+        }
     }
 
     /**
@@ -158,7 +161,7 @@ public class Typist
      */
     public void slideBack(int amount)
     {
-
+        progress = Math.max(0, progress - amount); 
     }
 
     /**
