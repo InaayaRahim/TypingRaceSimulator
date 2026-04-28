@@ -9,7 +9,7 @@ import java.lang.Math;
  * two-finger technique". He assured us the code was "basically done".
  * We have found evidence to the contrary.
  *
- * @author Inaaya
+ * @author Ty Posaurus & Inaaya
  * @version 1.0
  */
 public class TypingRace
