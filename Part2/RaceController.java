@@ -2,7 +2,6 @@ package Part2;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 public class RaceController {
@@ -85,15 +84,32 @@ public class RaceController {
 
         model.resetTypists();
 
+        // Apply caffeine mode if selected, which increases the speed of all typists by 50%
+        model.setCaffeineMode(view.getCaffeineCheck().isSelected());
+
         setupLanes();
 
         view.getStatusLabel().setText("Race started!");
+
+        final int[] tick = {0}; 
 
         // Create a Timeline to simulate the typing progress
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(100), e -> {
 
+                tick[0]++; // Increment the tick count
+
                 for (Typist t : model.getTypists()) {
+
+                    double baseSpeed = t.getSpeed();
+
+                    if (model.isCaffeineMode() && tick[0] <= 10) { // Apply caffeine boost for the first 10 ticks
+                        t.setSpeed(baseSpeed * 1.5); // Increase speed by 50% during caffeine boost
+                    }
+                    else {
+                        t.setSpeed(baseSpeed); // Reset to base speed after caffeine boost
+                    }
+
                     t.moveForward(); // Move each typist forward based on their speed
                 }
 

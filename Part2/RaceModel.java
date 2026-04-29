@@ -8,7 +8,11 @@ public class RaceModel {
     private String passage = "";
     private int passageLength = 0;
 
+    // List of all racers
     private List<Typist> typists = new ArrayList<>();
+
+    // Caffeine modifier flag
+    private boolean caffeineMode = false;
 
     // Set the passage and update the passage length and reset the current index for tracking progress
     public void setPassage(String passage) {
@@ -40,5 +44,13 @@ public class RaceModel {
                 t.slideBack();
             }
         }
+    }
+
+    public void setCaffeineMode(boolean value) {
+        this.caffeineMode = value;
+    }
+
+    public boolean isCaffeineMode() {
+        return caffeineMode;
     }
 }

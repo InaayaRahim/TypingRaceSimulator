@@ -10,6 +10,9 @@ public class RaceView {
     private ComboBox<String> passageSelector = new ComboBox<>();
     private TextField customInput = new TextField();
 
+    // Caffeine Toggle
+    private CheckBox caffeineCheck = new CheckBox("Caffeine Mode");
+
     private Button startButton = new Button("Start Race");
     private Label statusLabel = new Label("Select a passage");
 
@@ -33,6 +36,7 @@ public class RaceView {
             statusLabel,
             passageSelector,
             customInput,
+            caffeineCheck,
             startButton,
             lanesBox
         );
@@ -61,6 +65,10 @@ public class RaceView {
 
     public VBox getLanesBox() {
         return lanesBox;
+    }
+
+    public CheckBox getCaffeineCheck() {
+        return caffeineCheck;
     }
 }
 
