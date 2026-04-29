@@ -16,6 +16,12 @@ public class RaceController {
 
     // Initialize the controller by setting up event handlers for the passage selector and start button
     public void init() {
+
+        // Temporary test setup
+        model.addTypist(new Typist("Player 1"));
+        model.addTypist(new Typist("Player 2"));
+        model.addTypist(new Typist("Player 3"));
+
         view.getPassageSelector().setOnAction(e -> handleSelection());
         view.getStartButton().setOnAction(e -> handleStart());
     }
@@ -60,19 +66,29 @@ public class RaceController {
             return;
         }
 
-        // Reset the model's progress to start from the beginning
-        model.resetProgress();
+        model.resetTypists();
 
         view.getStatusLabel().setText("Race started!");
 
         // Create a Timeline to simulate the typing progress
         Timeline timeline = new Timeline (
             new KeyFrame(Duration.millis(100), e -> {
-                model.advance();
 
-                // Update the passage display with a cursor to indicate progress
+                // Move each typist forward by one character (this is a simplified simulation)
+                for (Typist t : model.getTypists()) {
+                    t.moveForward();
+                }
+
+                // Temporary visual placeholder 
+                int max = 0;
+                for (Typist t : model.getTypists()) {
+                    max = Math.max(max, t.getPosition());
+                }
+
+                // Get the passage text 
                 String text = model.getPassage();
-                int i = model.getCurrentIndex();
+
+                int i = Math.min(max, text.length());
 
                 // Insert a cursor (|) at the current index to show progress
                 String display = text.substring(0, i) + "|" + text.substring(i);

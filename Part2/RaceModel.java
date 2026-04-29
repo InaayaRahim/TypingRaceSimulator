@@ -1,17 +1,19 @@
 package Part2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RaceModel {
     
     private String passage = "";
     private int passageLength = 0;
 
-    private int currentIndex = 0;
+    private List<Typist> typists = new ArrayList<>();
 
     // Set the passage and update the passage length and reset the current index for tracking progress
     public void setPassage(String passage) {
         this.passage = passage;
         this.passageLength = passage.length();
-        this.currentIndex = 0; // Reset index when a new passage is set
     }
 
     // Getters for passage and passage length to allow the controller to access this information
@@ -23,19 +25,20 @@ public class RaceModel {
         return passageLength;
     }
 
-    // Reset the progress to the beginning of the passage
-    public void resetProgress() {
-        this.currentIndex = 0;
+    // Typists
+    public void addTypist(Typist t) {
+        typists.add(t);
     }
 
-    // Advance the current index to simulate typing progress, ensuring it does not exceed the passage length
-    public void advance() {
-        if (currentIndex < passageLength) {
-            currentIndex++;
+    public List<Typist> getTypists() {
+        return typists;
+    }
+
+    public void resetTypists() {
+        for (Typist t : typists) {
+            while (t.getPosition() > 0) {
+                t.slideBack();
+            }
         }
-    }
-
-    public int getCurrentIndex() {
-        return currentIndex;
     }
 }
