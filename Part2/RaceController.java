@@ -121,14 +121,6 @@ public class RaceController {
                 t.updateBurnout(); // Update burnout status for each typist
 
                 t.moveForward(); // Move each typist forward based on their speed
-
-                if (t.getPosition() >= passage.length()) {
-                    timeline.stop(); // Stop the timeline when a typist reaches the end of the passage
-
-                    view.getStatusLabel().setText(t.getName() + " wins!"); // Update status label to announce the winner
-
-                    return; // Exit the loop once a winner is declared
-                }
             }
 
             // redraw lanes
@@ -154,6 +146,16 @@ public class RaceController {
                 view.getLanesBox().getChildren().add(
                     new Label(name + " | " + visual) // Display the typist's name and their current progress through the passage
                 );
+            }
+
+            for (Typist t : model.getTypists()) {
+                if (t.getPosition() >= passage.length()) {
+                    timeline.stop(); // Stop the timeline when a typist reaches the end of the passage
+
+                    view.getStatusLabel().setText(t.getName() + " wins!"); // Update status label to announce the winner
+
+                    break; // Break instead of return to ensure the timeline is properly stopped and the UI updates with the winner announcement
+                }
             }
         });
         
