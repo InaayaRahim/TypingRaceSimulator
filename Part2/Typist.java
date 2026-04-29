@@ -22,7 +22,9 @@ public class Typist {
         position+= speed; // Move forward by the speed amount, which can be adjusted for different typists
     }
 
-    public void slideBack() {
+    public void slideBack(boolean autocorrectEnabled) {
+        double penalty = autocorrectEnabled ? 0.5 : 1.0; // If autocorrect is enabled, the penalty for sliding back is reduced by half
+
         position = Math.max(0, position - 1); // Ensure position does not go below 0
     }
 

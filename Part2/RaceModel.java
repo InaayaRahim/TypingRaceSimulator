@@ -43,7 +43,7 @@ public class RaceModel {
     public void resetTypists() {
         for (Typist t : typists) {
             while (t.getPosition() > 0) {
-                t.slideBack();
+                t.slideBack(autocorrect); // Slide back the typist to the start, using the autocorrect modifier to determine the penalty
             }
         }
     }
