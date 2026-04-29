@@ -24,23 +24,6 @@ public class Typist {
         position = Math.max(0, position - 1); // Ensure position does not go below 0
     }
 
-    public int getPosition() {
-        return (int) position; // convert to int for display purposes, but internally we can keep it as a double for more precise movement
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    // Burnout logic 
     public void updateBurnout() {
         if (burntOut) {
             burnoutTimer--;
@@ -57,6 +40,22 @@ public class Typist {
             burntOut = true;
             burnoutTimer = 10; // Burnout lasts for 10 ticks
         }
+    }
+
+    public int getPosition() {
+        return (int) position; // convert to int for display purposes, but internally we can keep it as a double for more precise movement
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     public boolean isBurntOut() {

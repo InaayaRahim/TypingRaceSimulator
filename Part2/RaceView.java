@@ -10,11 +10,13 @@ public class RaceView {
     private ComboBox<String> passageSelector = new ComboBox<>();
     private TextField customInput = new TextField();
 
-    // Caffeine Toggle
-    private CheckBox caffeineCheck = new CheckBox("Caffeine Mode");
-
     // Seat selector for multiple typists 
     private ComboBox<Integer> seatSelector = new ComboBox<>();
+
+    // Modifier checkboxes
+    private CheckBox autocorrectCheck = new CheckBox("Autocorrect");
+    private CheckBox caffeineCheck = new CheckBox("Caffeine Mode");
+    private CheckBox nightShiftCheck = new CheckBox("Night Shift");
 
     private Button startButton = new Button("Start Race");
     private Label statusLabel = new Label("Select a passage");
@@ -43,10 +45,13 @@ public class RaceView {
             statusLabel,
             passageSelector,
             customInput,
-            caffeineCheck,
 
             new Label("Number of Typists:"),
             seatSelector,
+
+            autocorrectCheck,
+            caffeineCheck,
+            nightShiftCheck,
 
             startButton,
             lanesBox
@@ -78,8 +83,16 @@ public class RaceView {
         return lanesBox;
     }
 
+    public CheckBox getAutocorrectCheck() {
+        return autocorrectCheck;
+    }
+
     public CheckBox getCaffeineCheck() {
         return caffeineCheck;
+    }
+
+    public CheckBox getNightShiftCheck() {
+        return nightShiftCheck;
     }
 
     public ComboBox<Integer> getSeatSelector() {

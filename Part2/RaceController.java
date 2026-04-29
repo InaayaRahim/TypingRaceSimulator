@@ -52,16 +52,6 @@ public class RaceController {
         view.getStatusLabel().setText("Passage selected (" + model.getPassageLength() + " characters)");
     }
 
-    private void setupLanes() {
-        view.getLanesBox().getChildren().clear();
-
-        for (Typist t : model.getTypists()) {
-            view.getLanesBox().getChildren().add(
-                new javafx.scene.control.Label(t.getName() + " |")
-            );
-        }
-    }
-
     // Simulate the typing progress by advancing through the passage and updating the display with a cursor
     private void handleStart() {
         if (model.getPassage().isEmpty()) {
@@ -79,13 +69,16 @@ public class RaceController {
         for (int i = 1; i <= seats; i++) {
             Typist t = new Typist("Player " + i);
 
-            t.setSpeed(0.7 + Math.random() * 0.8); // Random speed between 0.7 and 1.5 to create variability among typists
+            // Assign random speeds to typists to create variability, with a base speed of 0.7 and a random addition up to 1.0
+            t.setSpeed(0.7 + Math.random()); 
 
             model.addTypist(t);
         }
 
-        // Apply caffeine mode if selected, which increases the speed of all typists by 50%
+        // Set modifiers based on the state of the checkboxes in the view
+        model.setAutocorrect(view.getAutocorrectCheck().isSelected());
         model.setCaffeineMode(view.getCaffeineCheck().isSelected());
+        model.setNightShift(view.getNightShiftCheck().isSelected());
 
         setupLanes();
 
@@ -103,13 +96,21 @@ public class RaceController {
 
                     double baseSpeed = t.getSpeed();
 
-                    if (model.isCaffeineMode() && tick[0] <= 10) { // Apply caffeine boost for the first 10 ticks
-                        t.setSpeed(baseSpeed * 1.5); // Increase speed by 50% during caffeine boost
-                    }
-                    else {
-                        t.setSpeed(baseSpeed); // Reset to base speed after caffeine boost
+                    // Apply modifiers to speed based on the model's settings
+
+                    // Night Shift Modifier
+                    if (model.isNightShift()) {
+                        baseSpeed *= 0.85; // Reduce speed by 15% during night shift
                     }
 
+                    // Caffeine Mode Modifier
+                    if (model.isCaffeineMode() && tick[0] <= 10){
+                        baseSpeed *= 1.5; // Increase speed by 50% for the first 10 ticks when caffeine mode is active
+                    }
+
+                    t.setSpeed(baseSpeed); // Update the typist's speed based on modifiers
+
+                    // Burnout System
                     t.updateBurnout(); // Update burnout status for each typist
 
                     t.moveForward(); // Move each typist forward based on their speed
@@ -141,5 +142,15 @@ public class RaceController {
 
         timeline.setCycleCount(model.getPassageLength());
         timeline.play();
+    }
+
+    private void setupLanes() {
+        view.getLanesBox().getChildren().clear();
+
+        for (Typist t : model.getTypists()) {
+            view.getLanesBox().getChildren().add(
+                new javafx.scene.control.Label(t.getName() + " |")
+            );
+        }
     }
 }

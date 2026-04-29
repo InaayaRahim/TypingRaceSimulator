@@ -11,8 +11,10 @@ public class RaceModel {
     // List of all racers
     private List<Typist> typists = new ArrayList<>();
 
-    // Caffeine modifier flag
+    // Modifiers
+    private boolean autocorrect = false;
     private boolean caffeineMode = false;
+    private boolean nightShift = false;
 
     // Set the passage and update the passage length and reset the current index for tracking progress
     public void setPassage(String passage) {
@@ -46,11 +48,32 @@ public class RaceModel {
         }
     }
 
+    // Modifiers
+
+    // Autocorrect
+    public void setAutocorrect(boolean value) {
+        this.autocorrect = value;
+    }
+
+    public boolean isAutocorrect() {
+        return autocorrect;
+    }
+
+    // Caffeine Mode
     public void setCaffeineMode(boolean value) {
         this.caffeineMode = value;
     }
 
     public boolean isCaffeineMode() {
         return caffeineMode;
+    }
+
+    // Night Shift
+    public void setNightShift(boolean value) {
+        this.nightShift = value;
+    }
+
+    public boolean isNightShift() {
+        return nightShift;
     }
 }
