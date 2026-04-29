@@ -8,10 +8,12 @@ public class RaceView {
 
     // UI components
     private ComboBox<String> passageSelector = new ComboBox<>();
-    private TextField customPassageInput = new TextField();
+    private TextField customInput = new TextField();
 
     private Button startButton = new Button("Start Race");
     private Label statusLabel = new Label("Select a passage");
+
+    private TextArea passageDisplay = new TextArea();
 
     // Constructor takes the RaceState to allow for future updates based on state changes
     public RaceView(RaceModel model) {
@@ -24,15 +26,20 @@ public class RaceView {
         );
 
         // Set up custom passage input
-        customPassageInput.setPromptText("Enter custom passage here");
+        customInput.setPromptText("Enter custom passage here");
+
+        // Set up passage display area
+        passageDisplay.setWrapText(true);
+        passageDisplay.setEditable(false);
+        passageDisplay.setPrefHeight(150);
 
         // Add components to the root layout
         root.getChildren().addAll(
             statusLabel,
-            new Label("Select Passage:"),
             passageSelector,
-            customPassageInput,
-            startButton
+            customInput,
+            startButton,
+            passageDisplay
         );
     }
 
@@ -45,8 +52,8 @@ public class RaceView {
         return passageSelector;
     }
     
-    public TextField getCustomPassageInput() {
-        return customPassageInput;
+    public TextField getCustomInput() {
+        return customInput;
     }
     
     public Button getStartButton() {
@@ -55,6 +62,10 @@ public class RaceView {
     
     public Label getStatusLabel() {
         return statusLabel;
+    }
+
+    public TextArea getPassageDisplay() {
+        return passageDisplay;
     }
 }
 

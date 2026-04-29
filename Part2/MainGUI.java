@@ -12,9 +12,9 @@ public class MainGUI extends Application {
         RaceView view = new RaceView(model);
         RaceController controller = new RaceController(model, view);
 
-        controller.setup();
+        controller.init();
 
-        Scene scene = new Scene(view.getRoot(), 800, 400);
+        Scene scene = new Scene(view.getRoot(), 600, 300);
 
         stage.setTitle("Typing Race Simulator");
         stage.setScene(scene);
