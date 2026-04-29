@@ -15,13 +15,22 @@ public class RaceController {
         this.view = view;
     }
 
-    // Initialize the controller by setting up event handlers for the passage selector and start button
+    // Initialise the controller by setting up event handlers for the passage selector and start button
     public void init() {
 
-        // Temporary test setup
-        model.addTypist(new Typist("Player 1"));
-        model.addTypist(new Typist("Player 2"));
-        model.addTypist(new Typist("Player 3"));
+        // Test Players with different speeds
+        Typist p1 = new Typist("Player 1");
+        p1.setSpeed(1.3); // Player 1 is faster than the default speed
+
+        Typist p2 = new Typist("Player 2");
+        p2.setSpeed(1.0); // Player 2 has the default speed
+
+        Typist p3 = new Typist("Player 3");
+        p3.setSpeed(0.7); // Player 3 is slower than the default speed
+
+        model.addTypist(p1);
+        model.addTypist(p2);
+        model.addTypist(p3);
 
         view.getPassageSelector().setOnAction(e -> handleSelection());
         view.getStartButton().setOnAction(e -> handleStart());
@@ -61,8 +70,9 @@ public class RaceController {
         view.getLanesBox().getChildren().clear();
 
         for (Typist t : model.getTypists()) {
-            Label lane = new Label(t.getName() + " |");
-            view.getLanesBox().getChildren().add(lane);
+            view.getLanesBox().getChildren().add(
+                new javafx.scene.control.Label(t.getName() + " |")
+            );
         }
     }
 
@@ -83,9 +93,8 @@ public class RaceController {
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(100), e -> {
 
-                // move typists
                 for (Typist t : model.getTypists()) {
-                    t.moveForward();
+                    t.moveForward(); // Move each typist forward based on their speed
                 }
 
                 // redraw lanes
@@ -99,9 +108,9 @@ public class RaceController {
                         bar = "-" + bar;
                     }
 
-                    Label lane = new Label(t.getName() + " " + bar);
-
-                    view.getLanesBox().getChildren().add(lane);
+                    view.getLanesBox().getChildren().add(
+                        new javafx.scene.control.Label(t.getName() + " " + bar)
+                    );
                 }
             })
         );

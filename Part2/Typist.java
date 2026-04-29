@@ -2,17 +2,16 @@ package Part2;
 
 public class Typist {
     private String name;
-    private int position = 0;
-
+    private double position = 0; // Position in terms of characters typed, can be a double to allow for speed adjustments
     private double speed = 1.0;
-    private double accuracy = 1.0;
+
 
     public Typist(String name) {
         this.name = name;
     }
 
     public void moveForward() {
-        position++;
+        position+= speed; // Move forward by the speed amount, which can be adjusted for different typists
     }
 
     public void slideBack() {
@@ -20,7 +19,7 @@ public class Typist {
     }
 
     public int getPosition() {
-        return position;
+        return (int) position; // convert to int for display purposes, but internally we can keep it as a double for more precise movement
     }
 
     public String getName() {
@@ -33,13 +32,5 @@ public class Typist {
 
     public void setSpeed(double speed) {
         this.speed = speed;
-    }
-
-    public double getAccuracy() {
-        return accuracy;
-    }
-
-    public void setAccuracy(double accuracy) {
-        this.accuracy = accuracy;
     }
 }
