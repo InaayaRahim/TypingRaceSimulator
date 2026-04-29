@@ -21,6 +21,8 @@ public class RaceView {
     private Button startButton = new Button("Start Race");
     private Label statusLabel = new Label("Select a passage");
 
+    private Label passageDisplay = new Label(); // Label to display the passage, replaced by lanesBox for multiple typists
+
     private VBox lanesBox = new VBox(5); // Container for typist lanes
 
     // Constructor takes the RaceState to allow for future updates based on state changes
@@ -40,6 +42,8 @@ public class RaceView {
         seatSelector.getItems().addAll(2, 3, 4, 5, 6); 
         seatSelector.setValue(3); // Default to 3 typists
 
+        passageDisplay.setWrapText(true); // Allow passage text to wrap within the label
+
         // Lanes area replaces single passage display to allow for multiple typists
         root.getChildren().addAll(
             statusLabel,
@@ -54,6 +58,9 @@ public class RaceView {
             nightShiftCheck,
 
             startButton,
+
+            passageDisplay,
+
             lanesBox
         );
     }
@@ -81,6 +88,10 @@ public class RaceView {
 
     public VBox getLanesBox() {
         return lanesBox;
+    }
+
+    public Label getPassageDisplay() {
+        return passageDisplay;
     }
 
     public CheckBox getAutocorrectCheck() {

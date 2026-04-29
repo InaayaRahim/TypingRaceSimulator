@@ -2,6 +2,7 @@ package Part2;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 public class RaceController {
@@ -47,6 +48,9 @@ public class RaceController {
                 model.setPassage(view.getCustomInput().getText());
                 break;
         }
+
+        // Update passage display with the selected passage from the model
+        view.getPassageDisplay().setText(model.getPassage());
 
         // Update status label with passage length
         view.getStatusLabel().setText("Passage selected (" + model.getPassageLength() + " characters)");
@@ -119,22 +123,26 @@ public class RaceController {
                 // redraw lanes
                 view.getLanesBox().getChildren().clear();
 
+                String passage = model.getPassage();
+
                 for (Typist t : model.getTypists()) {
 
-                    String bar = "|";
+                    int pos = t.getPosition();
 
-                    for (int i = 0; i < t.getPosition(); i++) {
-                        bar = "-" + bar;
+                    if (pos > passage.length()) {
+                        pos = passage.length(); // Ensure position does not exceed passage length
                     }
+
+                    String visual = passage.substring(0, pos) + "|" + passage.substring(pos); // Add a cursor to indicate current position
 
                     String name = t.getName();
 
                     if (t.isBurntOut()) {
-                        name += " (BURNT OUT)"; // Indicate if the typist is currently burning out
+                        name += " (Burnt Out)"; // Indicate if the typist is currently burnt out
                     }
 
                     view.getLanesBox().getChildren().add(
-                        new javafx.scene.control.Label(name + " " + bar)
+                        new Label(name + " | " + visual) // Display the typist's name and their current progress through the passage
                     );
                 }
             })
