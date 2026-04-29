@@ -3,7 +3,9 @@ package Part2;
 public class Typist {
     private String name;
     private double position = 0; // Position in terms of characters typed, can be a double to allow for speed adjustments
-    private double speed = 1.0;
+    
+    private double baseSpeed = 1.0; // Permanent speed
+    private double speed = 1.0; // Current speed, which can be modified by different modes (e.g., caffeine, night shift)
 
     private boolean burntOut = false; // Flag to indicate if the typist has burnt out
     private int burnoutTimer = 0; // Timer to track how long the typist has been burning out
@@ -55,7 +57,16 @@ public class Typist {
     }
 
     public void setSpeed(double speed) {
+        this.baseSpeed = speed; 
         this.speed = speed;
+    }
+
+    public void setCurrentSpeed(double speed) {
+        this.speed = speed; // Set the current speed without changing the base speed, allowing for temporary modifiers
+    }
+
+    public double getBaseSpeed() {
+        return baseSpeed; // Get the permanent base speed of the typist, which can be used to reset speed after modifiers wear off
     }
 
     public boolean isBurntOut() {

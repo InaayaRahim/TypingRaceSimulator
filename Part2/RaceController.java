@@ -99,21 +99,23 @@ public class RaceController {
 
             for (Typist t : model.getTypists()) {
 
-                double baseSpeed = t.getSpeed();
+                double baseSpeed = t.getBaseSpeed();
+
+                double currentSpeed = baseSpeed;
 
                 // Apply modifiers to speed based on the model's settings
 
                 // Night Shift Modifier
                 if (model.isNightShift()) {
-                    baseSpeed *= 0.85; // Reduce speed by 15% during night shift
+                    currentSpeed *= 0.85; // Reduce speed by 15% during night shift
                 }
 
                 // Caffeine Mode Modifier
                 if (model.isCaffeineMode() && tick[0] <= 10){
-                    baseSpeed *= 1.5; // Increase speed by 50% for the first 10 ticks when caffeine mode is active
+                    currentSpeed *= 1.5; // Increase speed by 50% for the first 10 ticks when caffeine mode is active
                 }
 
-                t.setSpeed(baseSpeed); // Update the typist's speed based on modifiers
+                t.setCurrentSpeed(currentSpeed); // Update the typist's speed based on modifiers
 
                 // Burnout System
                 t.updateBurnout(); // Update burnout status for each typist
