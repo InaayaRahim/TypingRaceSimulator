@@ -1,11 +1,11 @@
 package Part2;
 
-public class RaceState {
+public class RaceModel {
     
     private String passageText = "default passage text";
     private int passageLength = 40;
 
-    public void setPassageText(String text) {
+    public void setPassage(String text) {
         this.passageText = text;
         this.passageLength = text.length();
     }

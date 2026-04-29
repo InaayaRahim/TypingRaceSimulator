@@ -14,7 +14,7 @@ public class RaceView {
     private Label statusLabel = new Label("Select a passage");
 
     // Constructor takes the RaceState to allow for future updates based on state changes
-    public RaceView(RaceSate state) {
+    public RaceView(RaceModel model) {
         // Set up passage selector
         passageSelector.getItems().addAll(
             "Short",
