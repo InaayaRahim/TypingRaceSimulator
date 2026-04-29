@@ -84,81 +84,81 @@ public class RaceController {
         model.setCaffeineMode(view.getCaffeineCheck().isSelected());
         model.setNightShift(view.getNightShiftCheck().isSelected());
 
-        setupLanes();
-
         view.getStatusLabel().setText("Race started!");
 
         final int[] tick = {0}; 
 
-        // Create a Timeline to simulate the typing progress
-        Timeline timeline = new Timeline(
-            new KeyFrame(Duration.millis(100), e -> {
+        // Declare timeline outside so we can stop it from within the KeyFrame when a winner is declared
+        Timeline timeline = new Timeline();
 
-                tick[0]++; // Increment the tick count
+        KeyFrame frame = new KeyFrame(Duration.millis(100), e -> {
 
-                for (Typist t : model.getTypists()) {
+            tick[0]++; // Increment the tick count
 
-                    double baseSpeed = t.getSpeed();
+            String passage = model.getPassage();
 
-                    // Apply modifiers to speed based on the model's settings
+            for (Typist t : model.getTypists()) {
 
-                    // Night Shift Modifier
-                    if (model.isNightShift()) {
-                        baseSpeed *= 0.85; // Reduce speed by 15% during night shift
-                    }
+                double baseSpeed = t.getSpeed();
 
-                    // Caffeine Mode Modifier
-                    if (model.isCaffeineMode() && tick[0] <= 10){
-                        baseSpeed *= 1.5; // Increase speed by 50% for the first 10 ticks when caffeine mode is active
-                    }
+                // Apply modifiers to speed based on the model's settings
 
-                    t.setSpeed(baseSpeed); // Update the typist's speed based on modifiers
-
-                    // Burnout System
-                    t.updateBurnout(); // Update burnout status for each typist
-
-                    t.moveForward(); // Move each typist forward based on their speed
+                // Night Shift Modifier
+                if (model.isNightShift()) {
+                    baseSpeed *= 0.85; // Reduce speed by 15% during night shift
                 }
 
-                // redraw lanes
-                view.getLanesBox().getChildren().clear();
-
-                String passage = model.getPassage();
-
-                for (Typist t : model.getTypists()) {
-
-                    int pos = t.getPosition();
-
-                    if (pos > passage.length()) {
-                        pos = passage.length(); // Ensure position does not exceed passage length
-                    }
-
-                    String visual = passage.substring(0, pos) + "|" + passage.substring(pos); // Add a cursor to indicate current position
-
-                    String name = t.getName();
-
-                    if (t.isBurntOut()) {
-                        name += " (Burnt Out)"; // Indicate if the typist is currently burnt out
-                    }
-
-                    view.getLanesBox().getChildren().add(
-                        new Label(name + " | " + visual) // Display the typist's name and their current progress through the passage
-                    );
+                // Caffeine Mode Modifier
+                if (model.isCaffeineMode() && tick[0] <= 10){
+                    baseSpeed *= 1.5; // Increase speed by 50% for the first 10 ticks when caffeine mode is active
                 }
-            })
-        );
 
-        timeline.setCycleCount(model.getPassageLength());
+                t.setSpeed(baseSpeed); // Update the typist's speed based on modifiers
+
+                // Burnout System
+                t.updateBurnout(); // Update burnout status for each typist
+
+                t.moveForward(); // Move each typist forward based on their speed
+
+                if (t.getPosition() >= passage.length()) {
+                    timeline.stop(); // Stop the timeline when a typist reaches the end of the passage
+
+                    view.getStatusLabel().setText(t.getName() + " wins!"); // Update status label to announce the winner
+
+                    return; // Exit the loop once a winner is declared
+                }
+            }
+
+            // redraw lanes
+            view.getLanesBox().getChildren().clear();
+
+            for (Typist t : model.getTypists()) {
+
+                int pos = t.getPosition();
+
+                // Ensure position does not exceed passage length to avoid StringIndexOutOfBoundsException when creating the visual representation of the typist's progress
+                if (pos > passage.length()) {
+                    pos = passage.length(); // Ensure position does not exceed passage length
+                }
+
+                String visual = passage.substring(0, pos) + "|" + passage.substring(pos); // Add a cursor to indicate current position
+
+                String name = t.getName();
+
+                if (t.isBurntOut()) {
+                    name += " (Burnt Out)"; // Indicate if the typist is currently burnt out
+                }
+
+                view.getLanesBox().getChildren().add(
+                    new Label(name + " | " + visual) // Display the typist's name and their current progress through the passage
+                );
+            }
+        });
+        
+        timeline.getKeyFrames().add(frame);
+
+        timeline.setCycleCount(Timeline.INDEFINITE); // Run indefinitely until a winner is declared
+
         timeline.play();
-    }
-
-    private void setupLanes() {
-        view.getLanesBox().getChildren().clear();
-
-        for (Typist t : model.getTypists()) {
-            view.getLanesBox().getChildren().add(
-                new javafx.scene.control.Label(t.getName() + " |")
-            );
-        }
     }
 }
