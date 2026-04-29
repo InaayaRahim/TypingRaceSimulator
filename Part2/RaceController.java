@@ -110,6 +110,8 @@ public class RaceController {
                         t.setSpeed(baseSpeed); // Reset to base speed after caffeine boost
                     }
 
+                    t.updateBurnout(); // Update burnout status for each typist
+
                     t.moveForward(); // Move each typist forward based on their speed
                 }
 
@@ -124,8 +126,14 @@ public class RaceController {
                         bar = "-" + bar;
                     }
 
+                    String name = t.getName();
+
+                    if (t.isBurntOut()) {
+                        name += " (BURNT OUT)"; // Indicate if the typist is currently burning out
+                    }
+
                     view.getLanesBox().getChildren().add(
-                        new javafx.scene.control.Label(t.getName() + " " + bar)
+                        new javafx.scene.control.Label(name + " " + bar)
                     );
                 }
             })

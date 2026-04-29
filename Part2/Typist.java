@@ -5,12 +5,18 @@ public class Typist {
     private double position = 0; // Position in terms of characters typed, can be a double to allow for speed adjustments
     private double speed = 1.0;
 
+    private boolean burntOut = false; // Flag to indicate if the typist has burnt out
+    private int burnoutTimer = 0; // Timer to track how long the typist has been burning out
 
     public Typist(String name) {
         this.name = name;
     }
 
     public void moveForward() {
+        if (burntOut) {
+            return; // If the typist is burnt out, they cannot move forward
+        }
+
         position+= speed; // Move forward by the speed amount, which can be adjusted for different typists
     }
 
@@ -32,5 +38,28 @@ public class Typist {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    // Burnout logic 
+    public void updateBurnout() {
+        if (burntOut) {
+            burnoutTimer--;
+
+            if (burnoutTimer <= 0) {
+                burntOut = false; // Typist recovers from burnout after the timer runs out
+            }
+
+            return; // If the typist is currently burnt out, they cannot move forward
+        }
+
+        // Random burnout trigger
+        if (Math.random() < 0.02) { // 2% chance to burn out each tick
+            burntOut = true;
+            burnoutTimer = 10; // Burnout lasts for 10 ticks
+        }
+    }
+
+    public boolean isBurntOut() {
+        return burntOut;
     }
 }
