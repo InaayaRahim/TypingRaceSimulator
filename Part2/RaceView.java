@@ -2,6 +2,7 @@ package Part2;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextFlow;
 
 public class RaceView {
     private VBox root = new VBox(10); // Vertical box with spacing of 10 pixels
@@ -21,9 +22,9 @@ public class RaceView {
     private Button startButton = new Button("Start Race");
     private Label statusLabel = new Label("Select a passage");
 
-    private Label passageDisplay = new Label(); // Label to display the passage, replaced by lanesBox for multiple typists
-
     private VBox lanesBox = new VBox(5); // Container for typist lanes
+
+    private Label passageDisplay = new Label(); // Label to display the passage, replaced by lanesBox for multiple typists
 
     // Constructor takes the RaceState to allow for future updates based on state changes
     public RaceView(RaceModel model) {

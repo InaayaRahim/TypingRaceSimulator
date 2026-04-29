@@ -45,7 +45,7 @@ public class Typist {
     }
 
     public int getPosition() {
-        return (int) Math.round(position); // convert to int for display purposes, but internally we can keep it as a double for more precise movement
+        return (int) Math.floor(position); // convert to int for display purposes, but internally we can keep it as a double for more precise movement
     }
 
     public String getName() {

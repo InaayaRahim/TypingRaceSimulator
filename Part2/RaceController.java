@@ -3,6 +3,10 @@ package Part2;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
 public class RaceController {
@@ -58,6 +62,8 @@ public class RaceController {
 
     // Simulate the typing progress by advancing through the passage and updating the display with a cursor
     private void handleStart() {
+        System.out.println("START PRESSED");
+
         if (model.getPassage().isEmpty()) {
             view.getStatusLabel().setText("Please select a passage first.");
             return;
@@ -97,6 +103,11 @@ public class RaceController {
 
             String passage = model.getPassage();
 
+            if (passage == null || passage.isEmpty()) {
+                view.getStatusLabel().setText("Please select a passage first.");
+                return; 
+            }
+
             for (Typist t : model.getTypists()) {
 
                 double baseSpeed = t.getBaseSpeed();
@@ -128,12 +139,27 @@ public class RaceController {
 
             for (Typist t : model.getTypists()) {
 
-                int pos = t.getPosition();
+                int pos = Math.min(t.getPosition(), passage.length());
 
                 // Ensure position does not exceed passage length to avoid StringIndexOutOfBoundsException when creating the visual representation of the typist's progress
                 if (pos > passage.length()) {
                     pos = passage.length(); // Ensure position does not exceed passage length
                 }
+
+                TextFlow flow = new TextFlow();
+
+                Text done = new Text(passage.substring(0, pos)); // Text for the portion of the passage that has been typed
+                done.setFill(Color.HOTPINK); // Set color for typed portion
+
+                // Cursor
+                Text cursor = new Text("|"); // Cursor to indicate current position
+                cursor.setFill(Color.BLACK); // Set color for cursor
+
+                // Remaining Text
+                Text remaining = new Text(passage.substring(pos)); // Text for the portion of the passage that has not been typed
+                remaining.setFill(Color.LIGHTGRAY); // Set color for remaining portion
+
+                flow.getChildren().addAll(done, cursor, remaining); // Combine the typed portion, cursor, and remaining portion into a single TextFlow for display
 
                 String visual = passage.substring(0, pos) + "|" + passage.substring(pos); // Add a cursor to indicate current position
 
@@ -143,9 +169,10 @@ public class RaceController {
                     name += " (Burnt Out)"; // Indicate if the typist is currently burnt out
                 }
 
-                view.getLanesBox().getChildren().add(
-                    new Label(name + " | " + visual) // Display the typist's name and their current progress through the passage
-                );
+                Label label = new Label(name); // Create a label for the typist's name
+                VBox container = new VBox(label, flow); // Create a container to hold both the name and the visual representation of the typist's progress
+
+                view.getLanesBox().getChildren().add(container); // Add the container to the lanes box in the view to display the typist's progress
             }
 
             for (Typist t : model.getTypists()) {
@@ -158,7 +185,7 @@ public class RaceController {
                 }
             }
         });
-        
+
         timeline.getKeyFrames().add(frame);
 
         timeline.setCycleCount(Timeline.INDEFINITE); // Run indefinitely until a winner is declared
