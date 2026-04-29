@@ -16,20 +16,7 @@ public class RaceController {
 
     // Initialise the controller by setting up event handlers for the passage selector and start button
     public void init() {
-
-        // Test Players with different speeds
-        Typist p1 = new Typist("Player 1");
-        p1.setSpeed(1.3); // Player 1 is faster than the default speed
-
-        Typist p2 = new Typist("Player 2");
-        p2.setSpeed(1.0); // Player 2 has the default speed
-
-        Typist p3 = new Typist("Player 3");
-        p3.setSpeed(0.7); // Player 3 is slower than the default speed
-
-        model.addTypist(p1);
-        model.addTypist(p2);
-        model.addTypist(p3);
+        // Removed hardcoded typists
 
         view.getPassageSelector().setOnAction(e -> handleSelection());
         view.getStartButton().setOnAction(e -> handleStart());
@@ -83,6 +70,19 @@ public class RaceController {
         }
 
         model.resetTypists();
+
+        model.getTypists().clear(); // Clear existing typists before adding new ones based on seat selection
+
+        int seats = view.getSeatSelector().getValue(); // Get the number of typists from the seat selector
+
+        // Dynamically create typists based on the number of seats selected, with random speeds to create variability among typists
+        for (int i = 1; i <= seats; i++) {
+            Typist t = new Typist("Player " + i);
+
+            t.setSpeed(0.7 + Math.random() * 0.8); // Random speed between 0.7 and 1.5 to create variability among typists
+
+            model.addTypist(t);
+        }
 
         // Apply caffeine mode if selected, which increases the speed of all typists by 50%
         model.setCaffeineMode(view.getCaffeineCheck().isSelected());

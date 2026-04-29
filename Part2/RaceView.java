@@ -13,6 +13,9 @@ public class RaceView {
     // Caffeine Toggle
     private CheckBox caffeineCheck = new CheckBox("Caffeine Mode");
 
+    // Seat selector for multiple typists 
+    private ComboBox<Integer> seatSelector = new ComboBox<>();
+
     private Button startButton = new Button("Start Race");
     private Label statusLabel = new Label("Select a passage");
 
@@ -31,12 +34,20 @@ public class RaceView {
         // Set up custom passage input
         customInput.setPromptText("Enter custom passage here");
 
+        // Set up seat selector for multiple typists, allowing selection from 2 to 6 typists
+        seatSelector.getItems().addAll(2, 3, 4, 5, 6); 
+        seatSelector.setValue(3); // Default to 3 typists
+
         // Lanes area replaces single passage display to allow for multiple typists
         root.getChildren().addAll(
             statusLabel,
             passageSelector,
             customInput,
             caffeineCheck,
+
+            new Label("Number of Typists:"),
+            seatSelector,
+
             startButton,
             lanesBox
         );
@@ -69,6 +80,10 @@ public class RaceView {
 
     public CheckBox getCaffeineCheck() {
         return caffeineCheck;
+    }
+
+    public ComboBox<Integer> getSeatSelector() {
+        return seatSelector;
     }
 }
 
