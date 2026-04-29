@@ -2,6 +2,7 @@ package Part2;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 public class RaceController {
@@ -52,11 +53,17 @@ public class RaceController {
                 break;
         }
 
-        // Update the passage display and status label
-        view.getPassageDisplay().setText(model.getPassage());
-
         // Update status label with passage length
         view.getStatusLabel().setText("Passage selected (" + model.getPassageLength() + " characters)");
+    }
+
+    private void setupLanes() {
+        view.getLanesBox().getChildren().clear();
+
+        for (Typist t : model.getTypists()) {
+            Label lane = new Label(t.getName() + " |");
+            view.getLanesBox().getChildren().add(lane);
+        }
     }
 
     // Simulate the typing progress by advancing through the passage and updating the display with a cursor
@@ -68,37 +75,37 @@ public class RaceController {
 
         model.resetTypists();
 
+        setupLanes();
+
         view.getStatusLabel().setText("Race started!");
 
         // Create a Timeline to simulate the typing progress
-        Timeline timeline = new Timeline (
+        Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(100), e -> {
 
-                // Move each typist forward by one character (this is a simplified simulation)
+                // move typists
                 for (Typist t : model.getTypists()) {
                     t.moveForward();
                 }
 
-                // Temporary visual placeholder 
-                int max = 0;
+                // redraw lanes
+                view.getLanesBox().getChildren().clear();
+
                 for (Typist t : model.getTypists()) {
-                    max = Math.max(max, t.getPosition());
+
+                    String bar = "|";
+
+                    for (int i = 0; i < t.getPosition(); i++) {
+                        bar = "-" + bar;
+                    }
+
+                    Label lane = new Label(t.getName() + " " + bar);
+
+                    view.getLanesBox().getChildren().add(lane);
                 }
-
-                // Get the passage text 
-                String text = model.getPassage();
-
-                int i = Math.min(max, text.length());
-
-                // Insert a cursor (|) at the current index to show progress
-                String display = text.substring(0, i) + "|" + text.substring(i);
-
-                // Update the passage display with the new text
-                view.getPassageDisplay().setText(display);
             })
         );
 
-        // Set the cycle count to the length of the passage so it will stop after simulating the entire passage
         timeline.setCycleCount(model.getPassageLength());
         timeline.play();
     }

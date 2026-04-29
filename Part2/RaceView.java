@@ -13,7 +13,7 @@ public class RaceView {
     private Button startButton = new Button("Start Race");
     private Label statusLabel = new Label("Select a passage");
 
-    private TextArea passageDisplay = new TextArea();
+    private VBox lanesBox = new VBox(5); // Container for typist lanes
 
     // Constructor takes the RaceState to allow for future updates based on state changes
     public RaceView(RaceModel model) {
@@ -28,18 +28,13 @@ public class RaceView {
         // Set up custom passage input
         customInput.setPromptText("Enter custom passage here");
 
-        // Set up passage display area
-        passageDisplay.setWrapText(true);
-        passageDisplay.setEditable(false);
-        passageDisplay.setPrefHeight(150);
-
-        // Add components to the root layout
+        // Lanes area replaces single passage display to allow for multiple typists
         root.getChildren().addAll(
             statusLabel,
             passageSelector,
             customInput,
             startButton,
-            passageDisplay
+            lanesBox
         );
     }
 
@@ -64,8 +59,8 @@ public class RaceView {
         return statusLabel;
     }
 
-    public TextArea getPassageDisplay() {
-        return passageDisplay;
+    public VBox getLanesBox() {
+        return lanesBox;
     }
 }
 
