@@ -52,13 +52,15 @@ public class RaceView {
         seatSelector.getItems().addAll(2, 3, 4, 5, 6); 
         seatSelector.setValue(3); // Default to 3 typists
 
-        rebuildPlayerConfigs(seatSelector.getValue()); // Initialize player configurations based on default number of typists
+        passageDisplay.setWrapText(true); // Allow passage text to wrap within the label
 
-        seatSelector.setOnAction(e -> {
-            rebuildPlayerConfigs(seatSelector.getValue()); // Rebuild player configurations when the number of typists changes
+        seatSelector.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                rebuildPlayerConfigs(newVal); // Rebuild player configurations when the number of typists changes
+            }
         });
 
-        passageDisplay.setWrapText(true); // Allow passage text to wrap within the label
+        rebuildPlayerConfigs(seatSelector.getValue()); // Initial build of player configurations based on default number of typists
 
         // Lanes area replaces single passage display to allow for multiple typists
         root.getChildren().addAll(
@@ -86,15 +88,17 @@ public class RaceView {
         playerConfigs.clear(); // Clear existing configurations
         playerConfigBox.getChildren().clear(); // Clear existing UI components
 
-        for (int i = 1; i <= seats; i++) {
-            PlayerConfig config = new PlayerConfig(i); // Create a new player configuration for each typist
+        for (int i = 0; i < seats; i++) {
+            PlayerConfig config = new PlayerConfig(i + 1); // Create a new player configuration for each typist
             playerConfigs.add(config); // Add the configuration to the list
 
-            playerConfigBox.getChildren().add(
-                new Label("Player " + i)
-            ); // Add the configuration UI to the view
+            VBox wrapper = new VBox(5); // Wrapper to hold the configuration UI for better spacing
 
-            playerConfigBox.getChildren().add(config.getUI()); // Add the configuration UI to the view
+            Label label = new Label("Player " + (i + 1) + " Configuration");
+
+            wrapper.getChildren().addAll(label, config.getUI()); // Add the label and the configuration UI to the wrapper
+
+            playerConfigBox.getChildren().add(wrapper); // Add the wrapper to the player configuration box in the view
         }
     }
 

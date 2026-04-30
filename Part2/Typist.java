@@ -1,5 +1,7 @@
 package Part2;
 
+import javafx.scene.paint.Color;
+
 import Part2.TypingStyle;
 
 public class Typist {
@@ -17,6 +19,9 @@ public class Typist {
     private TypingStyle style = TypingStyle.TOUCH_TYPIST; // Default typing style, can be set to different styles for different typists
     private KeyboardType keyboard = KeyboardType.MEMBRANE; // Default keyboard type, can be set to different types for different typists
     private Accessory accessory = Accessory.NONE; // Default accessory, can be set to different accessories for different typists
+
+    private String symbol = "A"; // Default symbol for the typist, can be set to different symbols for different typists
+    private Color color = Color.BLACK; // Default color for the typist, can be set to different colors for different typists
 
     public Typist(String name) {
         this.name = name;
@@ -145,6 +150,22 @@ public class Typist {
 
     public Accessory getAccessory() {
         return accessory; 
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol; // Set the symbol for the typist, which can be used for display purposes in the UI
+    }
+
+    public String getSymbol() {
+        return symbol; // Get the symbol for the typist, which can be used for display purposes in the UI
+    }
+
+    public void setColor(Color color) {
+        this.color = color; // Set the color for the typist, which can be used for display purposes in the UI
+    }
+
+    public Color getColor() {
+        return color; // Get the color for the typist, which can be used for display purposes in the UI
     }
 
     public int getPosition() {

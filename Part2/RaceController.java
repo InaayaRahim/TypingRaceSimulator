@@ -69,7 +69,6 @@ public class RaceController {
 
     // Simulate the typing progress by advancing through the passage and updating the display with a cursor
     private void handleStart() {
-        System.out.println("START PRESSED");
 
         if (model.getPassage().isEmpty()) {
             view.getStatusLabel().setText("Please select a passage first.");
@@ -77,7 +76,6 @@ public class RaceController {
         }
 
         model.resetTypists();
-
         model.getTypists().clear(); // Clear existing typists before adding new ones based on seat selection
 
         int seats = view.getSeatSelector().getValue(); // Get the number of typists from the seat selector
@@ -91,6 +89,9 @@ public class RaceController {
             t.setTypingStyle(config.getStyle()); // Set the typing style for the typist based on the selection in the view
             t.setKeyboardType(config.getKeyboard()); // Set the keyboard type for the typist based on the selection in the view
             t.setAccessory(config.getAccessory()); // Set the accessory for the typist based on the selection in the view
+
+            t.setSymbol(config.getSymbol()); // Set the symbol for the typist based on the input in the view
+            t.setColor(config.getColor()); // Set the color for the typist based on the selection in the view
 
             t.setSpeed(0.7 + Math.random());
 
@@ -143,7 +144,7 @@ public class RaceController {
                 // Burnout System
                 t.updateBurnout(); // Update burnout status for each typist
 
-                t.typeTick(model.isAutocorrect());; // Move each typist forward based on their speed
+                t.typeTick(model.isAutocorrect()); // Move each typist forward based on their speed
             }
 
             // redraw lanes
@@ -161,7 +162,7 @@ public class RaceController {
                 TextFlow flow = new TextFlow();
 
                 Text done = new Text(passage.substring(0, pos)); // Text for the portion of the passage that has been typed
-                done.setFill(Color.HOTPINK); // Set color for typed portion
+                done.setFill(t.getColor()); // Set color for typed portion
 
                 // Cursor
                 Text cursor = new Text("|"); // Cursor to indicate current position
@@ -179,13 +180,21 @@ public class RaceController {
                 String keyboardText = t.getKeyboardType().toString().replace("_", " ").toLowerCase(); // Get the typist's keyboard type as a string for display
                 String accessoryText = t.getAccessory().toString().replace("_", " ").toLowerCase(); // Get the typist's accessory as a string for display
 
-                String name = t.getName() + " (" + styleText + ", " + keyboardText + ", " + accessoryText + ")"; // Include the typist's name, typing style, and keyboard type in the label for display
+                String symbol = t.getSymbol();
+
+                if (symbol == null || symbol.isEmpty()) {
+                    symbol = "🔺"; // default
+                }
+
+                String name = t.getSymbol() + " " + t.getName() + " (" + styleText + ", " + keyboardText + ", " + accessoryText + ")"; // Include the typist's name, typing style, and keyboard type in the label for display
 
                 if (t.isBurntOut()) {
                     name += " (Burnt Out)"; // Indicate if the typist is currently burnt out
                 }
 
                 Label label = new Label(name); // Create a label for the typist's name
+                label.setTextFill(t.getColor()); // Set the color of the label to match the typist's assigned color
+
                 VBox container = new VBox(label, flow); // Create a container to hold both the name and the visual representation of the typist's progress
 
                 view.getLanesBox().getChildren().add(container); // Add the container to the lanes box in the view to display the typist's progress
