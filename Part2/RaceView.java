@@ -3,6 +3,8 @@ package Part2;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
+import java.util.List;
+import java.util.ArrayList;
 
 import Part2.TypingStyle;
 import Part2.Accessory;
@@ -28,11 +30,10 @@ public class RaceView {
 
     private VBox lanesBox = new VBox(5); // Container for typist lanes
 
-    private Label passageDisplay = new Label(); // Label to display the passage, replaced by lanesBox for multiple typists
+    private VBox playerConfigBox = new VBox(8); // Container for player configuration options
+    private List<PlayerConfig> playerConfigs = new ArrayList<>(); // List to hold player configuration objects
 
-    private ComboBox<TypingStyle> styleSelector = new ComboBox<>();
-    private ComboBox<KeyboardType> keyboardSelector = new ComboBox<>();
-    private ComboBox<Accessory> accessorySelector = new ComboBox<>();
+    private Label passageDisplay = new Label(); // Label to display the passage, replaced by lanesBox for multiple typists
 
     // Constructor takes the RaceState to allow for future updates based on state changes
     public RaceView(RaceModel model) {
@@ -51,14 +52,11 @@ public class RaceView {
         seatSelector.getItems().addAll(2, 3, 4, 5, 6); 
         seatSelector.setValue(3); // Default to 3 typists
 
-        styleSelector.getItems().addAll(TypingStyle.values());
-        styleSelector.setValue(TypingStyle.TOUCH_TYPIST); // Default typing style
+        rebuildPlayerConfigs(seatSelector.getValue()); // Initialize player configurations based on default number of typists
 
-        keyboardSelector.getItems().addAll(KeyboardType.values());
-        keyboardSelector.setValue(KeyboardType.MEMBRANE); // Default keyboard type
-
-        accessorySelector.getItems().addAll(Accessory.values());
-        accessorySelector.setValue(Accessory.NONE); // Default accessory
+        seatSelector.setOnAction(e -> {
+            rebuildPlayerConfigs(seatSelector.getValue()); // Rebuild player configurations when the number of typists changes
+        });
 
         passageDisplay.setWrapText(true); // Allow passage text to wrap within the label
 
@@ -71,23 +69,33 @@ public class RaceView {
             new Label("Number of Typists:"),
             seatSelector,
 
+            new Label("Player Customisation:"),
+            playerConfigBox, // Add player configuration options to the view
+
             autocorrectCheck,
             caffeineCheck,
             nightShiftCheck,
-
-            new Label("Typing Style:"),
-            styleSelector,
-
-            new Label("Keyboard Type:"),
-            keyboardSelector,
-
-            new Label("Accessory:"),
-            accessorySelector,
 
             startButton,
             passageDisplay,
             lanesBox
         );
+    }
+
+    private void rebuildPlayerConfigs(int seats) {
+        playerConfigs.clear(); // Clear existing configurations
+        playerConfigBox.getChildren().clear(); // Clear existing UI components
+
+        for (int i = 1; i <= seats; i++) {
+            PlayerConfig config = new PlayerConfig(i); // Create a new player configuration for each typist
+            playerConfigs.add(config); // Add the configuration to the list
+
+            playerConfigBox.getChildren().add(
+                new Label("Player " + i)
+            ); // Add the configuration UI to the view
+
+            playerConfigBox.getChildren().add(config.getUI()); // Add the configuration UI to the view
+        }
     }
 
     // Getters for UI components to allow the controller to interact with them
@@ -135,16 +143,8 @@ public class RaceView {
         return seatSelector;
     }
 
-    public ComboBox<TypingStyle> getStyleSelector() {
-        return styleSelector;
-    }
-
-    public ComboBox<KeyboardType> getKeyboardSelector() {
-        return keyboardSelector;
-    }
-
-    public ComboBox<Accessory> getAccessorySelector() {
-        return accessorySelector;
+    public List<PlayerConfig> getPlayerConfigs() {
+        return playerConfigs;
     }
 }
 

@@ -82,17 +82,15 @@ public class RaceController {
 
         int seats = view.getSeatSelector().getValue(); // Get the number of typists from the seat selector
 
-        TypingStyle selectedStyle = view.getStyleSelector().getValue(); // Get the selected typing style from the view
-        KeyboardType selectedKeyboard = view.getKeyboardSelector().getValue(); // Get the selected keyboard type from the view
-        Accessory selectedAccessory = view.getAccessorySelector().getValue(); // Get the selected accessory from the view
-
         // Dynamically create typists based on the number of seats selected, with random speeds to create variability among typists
-        for (int i = 1; i <= seats; i++) {
-            Typist t = new Typist("Player " + i);
+        for (int i = 0; i < seats; i++) {
+            PlayerConfig config = view.getPlayerConfigs().get(i); // Get the player configuration for this typist
 
-            t.setTypingStyle(selectedStyle); // Set the typing style for the typist based on the selection in the view
-            t.setKeyboardType(selectedKeyboard); // Set the keyboard type for the typist based on the selection in the view
-            t.setAccessory(selectedAccessory); // Set the accessory for the typist based on the selection in the view
+            Typist t = new Typist("Player " + (i + 1)); // Create a new typist with a name based on the player number
+
+            t.setTypingStyle(config.getStyle()); // Set the typing style for the typist based on the selection in the view
+            t.setKeyboardType(config.getKeyboard()); // Set the keyboard type for the typist based on the selection in the view
+            t.setAccessory(config.getAccessory()); // Set the accessory for the typist based on the selection in the view
 
             t.setSpeed(0.7 + Math.random());
 
