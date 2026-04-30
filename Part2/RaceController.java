@@ -10,6 +10,7 @@ import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
 import Part2.TypingStyle;
+import Part2.KeyboardType;
 
 public class RaceController {
     private RaceModel model;
@@ -99,6 +100,21 @@ public class RaceController {
             // Assign random speeds to typists to create variability, with a base speed of 0.7 and a random addition up to 1.0
             t.setSpeed(0.7 + Math.random()); 
 
+            switch (i % 4) { // Assign different keyboard types based on the typist's index to create further diversity in typing behavior and potential future modifiers based on keyboard type
+                case 0:
+                    t.setKeyboardType(KeyboardType.MECHANICAL);
+                    break;
+                case 1:
+                    t.setKeyboardType(KeyboardType.MEMBRANE);
+                    break;
+                case 2:
+                    t.setKeyboardType(KeyboardType.TOUCHSCREEN);
+                    break;
+                case 3:
+                    t.setKeyboardType(KeyboardType.STENOGRAPHY);
+                    break;
+            }
+
             model.addTypist(t);
         }
 
@@ -180,7 +196,10 @@ public class RaceController {
 
                 String visual = passage.substring(0, pos) + "|" + passage.substring(pos); // Add a cursor to indicate current position
 
-                String name = t.getName() + " (" + t.getTypingStyle() + ")"; // Include the typist's name and typing style in the label
+                String style = t.getTypingStyle().toString().replace("_", " ").toLowerCase(); // Get the typist's typing style as a string for display
+                String keyboard = t.getKeyboardType().toString().replace("_", " ").toLowerCase(); // Get the typist's keyboard type as a string for display
+
+                String name = t.getName() + " (" + style + ", " + keyboard + ")"; // Include the typist's name, typing style, and keyboard type in the label for display
 
                 if (t.isBurntOut()) {
                     name += " (Burnt Out)"; // Indicate if the typist is currently burnt out

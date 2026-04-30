@@ -16,6 +16,8 @@ public class Typist {
 
     private TypingStyle style = TypingStyle.TOUCH_TYPIST; // Default typing style, can be set to different styles for different typists
 
+    private KeyboardType keyboard = KeyboardType.MEMBRANE; // Default keyboard type, can be set to different types for different typists, which could affect speed and accuracy in future iterations
+
     public Typist(String name) {
         this.name = name;
     }
@@ -93,6 +95,30 @@ public class Typist {
 
     public TypingStyle getTypingStyle() {
         return style; // Get the current typing style of the typist, which can be used to determine their burnout modifier and other characteristics
+    }
+
+    public void setKeyboardType(KeyboardType keyboard) {
+        this.keyboard = keyboard; // Set the keyboard type for the typist, which can affect their speed and accuracy in future iterations
+
+        switch (keyboard) {
+            case MECHANICAL:
+                baseSpeed *= 1.2; 
+                accuracy *= 1.05; 
+                break;
+            case MEMBRANE:
+                break; // Membrane keyboards are the baseline, so no changes to speed or accuracy
+            case TOUCHSCREEN:
+                accuracy *= 0.85; 
+                break;
+            case STENOGRAPHY:
+                baseSpeed *= 1.5; 
+                accuracy *= 0.95; 
+                break;
+        }
+    }
+
+    public KeyboardType getKeyboardType() {
+        return keyboard; 
     }
 
     public int getPosition() {
