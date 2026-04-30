@@ -11,6 +11,7 @@ import javafx.util.Duration;
 
 import Part2.TypingStyle;
 import Part2.KeyboardType;
+import Part2.Accessory;
 
 public class RaceController {
     private RaceModel model;
@@ -115,6 +116,21 @@ public class RaceController {
                     break;
             }
 
+            switch (i % 4) { // Assign different accessories based on the typist's index to create even more diversity in typing behavior and potential future modifiers based on accessories
+                case 0:
+                    t.setAccessory(Accessory.NONE);
+                    break;
+                case 1:
+                    t.setAccessory(Accessory.WRIST_SUPPORT);
+                    break;
+                case 2:
+                    t.setAccessory(Accessory.ENERGY_DRINK);
+                    break;
+                case 3:
+                    t.setAccessory(Accessory.HEADPHONES);
+                    break;
+            }
+
             model.addTypist(t);
         }
 
@@ -198,8 +214,9 @@ public class RaceController {
 
                 String style = t.getTypingStyle().toString().replace("_", " ").toLowerCase(); // Get the typist's typing style as a string for display
                 String keyboard = t.getKeyboardType().toString().replace("_", " ").toLowerCase(); // Get the typist's keyboard type as a string for display
+                String accessory = t.getAccessory().toString().replace("_", " ").toLowerCase(); // Get the typist's accessory as a string for display
 
-                String name = t.getName() + " (" + style + ", " + keyboard + ")"; // Include the typist's name, typing style, and keyboard type in the label for display
+                String name = t.getName() + " (" + style + ", " + keyboard + ", " + accessory + ")"; // Include the typist's name, typing style, and keyboard type in the label for display
 
                 if (t.isBurntOut()) {
                     name += " (Burnt Out)"; // Indicate if the typist is currently burnt out

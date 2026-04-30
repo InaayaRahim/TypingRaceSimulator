@@ -15,8 +15,8 @@ public class Typist {
     private int burnoutTimer = 0; // Timer to track how long the typist has been burning out
 
     private TypingStyle style = TypingStyle.TOUCH_TYPIST; // Default typing style, can be set to different styles for different typists
-
-    private KeyboardType keyboard = KeyboardType.MEMBRANE; // Default keyboard type, can be set to different types for different typists, which could affect speed and accuracy in future iterations
+    private KeyboardType keyboard = KeyboardType.MEMBRANE; // Default keyboard type, can be set to different types for different typists
+    private Accessory accessory = Accessory.NONE; // Default accessory, can be set to different accessories for different typists
 
     public Typist(String name) {
         this.name = name;
@@ -27,6 +27,18 @@ public class Typist {
             updateBurnout(); // If the typist is burnt out, we need to update the burnout status and skip moving forward
             return;
         }
+
+        double effectiveAccuracy = accuracy; // Start with the base accuracy
+
+        if (accessory == Accessory.HEADPHONES) {
+            effectiveAccuracy += 0.05; 
+        }
+
+        if (accessory == Accessory.ENERGY_DRINK) {
+            effectiveAccuracy += 0.03; 
+        }
+
+        effectiveAccuracy = Math.min(1.0, effectiveAccuracy); // Ensure accuracy does not exceed 100%
 
         if (Math.random() < accuracy) { // If the typist types correctly based on their accuracy
             position += speed; // Move forward by the current speed
@@ -50,6 +62,12 @@ public class Typist {
             }
 
             return; // If the typist is currently burnt out, they cannot move forward
+        }
+
+        double burnoutChance = 0.02 * getBurnoutModifier(); // Base burnout chance is 2%, modified by the typist's burnout modifier
+
+        if (accessory == Accessory.WRIST_SUPPORT) {
+            burnoutChance *= 0.7; // Wrist support can reduce the chance of burnout by 30% 
         }
 
         // Random burnout trigger
@@ -119,6 +137,14 @@ public class Typist {
 
     public KeyboardType getKeyboardType() {
         return keyboard; 
+    }
+
+    public void setAccessory(Accessory accessory) {
+        this.accessory = accessory; // Set the accessory for the typist, which can affect their speed, accuracy, and burnout chance in future iterations
+    }
+
+    public Accessory getAccessory() {
+        return accessory; 
     }
 
     public int getPosition() {
