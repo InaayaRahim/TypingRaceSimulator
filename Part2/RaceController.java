@@ -2,6 +2,7 @@ package Part2;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -354,6 +355,23 @@ public class RaceController {
                     }
 
                     historyOutput.append("\n");
+                }
+
+                view.getWpmChart().getData().clear(); // Clear the WPM chart before updating it with new data
+
+                for (Typist t : model.getTypists()) {
+                    XYChart.Series<Number, Number> series = new XYChart.Series<>();
+                    series.setName(t.getName());
+
+                    int raceNum = 1;
+
+                    for (RaceRecord r : t.getHistory()) {
+                        series.getData().add(
+                            new XYChart.Data<>(raceNum, r.getWpm())
+                        );
+                        raceNum++;
+                    }
+                    view.getWpmChart().getData().add(series);
                 }
 
                 view.getResultsLabel().setText(results.toString() + "\n\n" + historyOutput.toString()); // Update the results label in the view with the formatted results for all typists

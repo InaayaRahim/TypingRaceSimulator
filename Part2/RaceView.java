@@ -6,6 +6,9 @@ import javafx.scene.text.TextFlow;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 
 import Part2.TypingStyle;
 import Part2.Accessory;
@@ -45,6 +48,8 @@ public class RaceView {
     private Button compareButton = new Button("Compare Players"); // Button to trigger player comparison in results
     private Label comparisonLabel = new Label(); // Label to display the results of player comparison
 
+    private LineChart<Number, Number> wpmChart; // Line chart to display WPM progression over time for each typist
+
     // Constructor takes the RaceState to allow for future updates based on state changes
     public RaceView(RaceModel model) {
         // Set up passage selector
@@ -77,6 +82,15 @@ public class RaceView {
         metricSelector.getItems().addAll("WPM", "Accuracy", "Burnouts");
         metricSelector.setValue("WPM"); // Default metric to display in results
 
+        NumberAxis xAxis = new NumberAxis();
+        xAxis.setLabel("Race Number");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("WPM");
+
+        wpmChart = new LineChart<>(xAxis, yAxis);
+        wpmChart.setTitle("WPM Progression");
+
         // Lanes area replaces single passage display to allow for multiple typists
         rootContent.getChildren().addAll(
             statusLabel,
@@ -96,6 +110,8 @@ public class RaceView {
             startButton,
             passageDisplay,
             lanesBox,
+
+            wpmChart, // Add the WPM progression chart to the view
 
             resultsLabel,
 
@@ -197,6 +213,10 @@ public class RaceView {
 
     public Label getComparisonLabel() {
         return comparisonLabel;
+    }
+
+    public LineChart<Number, Number> getWpmChart() {
+        return wpmChart;
     }
 }
 
