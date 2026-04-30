@@ -10,6 +10,8 @@ public class Typist {
     private boolean burntOut = false; // Flag to indicate if the typist has burnt out
     private int burnoutTimer = 0; // Timer to track how long the typist has been burning out
 
+    private TypingStyle style = TypingStyle.TOUCH_TYPIST; // Default typing style, can be set to different styles for different typists
+
     public Typist(String name) {
         this.name = name;
     }
@@ -40,10 +42,29 @@ public class Typist {
         }
 
         // Random burnout trigger
-        if (Math.random() < 0.02) { // 2% chance to burn out each tick
+        if (Math.random() < 0.02 * getBurnoutModifier()) { // 2% chance to burn out each tick, modified by the typist's burnout modifier
             burntOut = true;
             burnoutTimer = 10; // Burnout lasts for 10 ticks
         }
+    }
+
+    public double getBurnoutModifier() {
+        switch (style) {
+            case TOUCH_TYPIST:
+                return 1.0; // Standard burnout chance for touch typists
+            case HUNT_AND_PECK:
+                return 1.3; // Higher burnout chance for hunt and peck typists due to less efficient typing style
+            case PHONE_THUMBS:
+                return 1.1; // Slightly higher burnout chance for phone thumbs users due to the awkward typing position and smaller keys
+            case VOICE_TO_TEXT:
+                return 0.7; // Lower burnout chance for voice to text users since they are not physically typing
+            default:
+                return 1.0; // Default burnout modifier
+        }
+    }
+
+    public void setTypingStyle(TypingStyle style) {
+        this.style = style; // Set the typing style for the typist, which can affect their burnout chance and potentially other factors in the future
     }
 
     public int getPosition() {

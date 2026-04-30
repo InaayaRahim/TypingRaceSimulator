@@ -9,6 +9,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
+import Part2.TypingStyle;
+
 public class RaceController {
     private RaceModel model;
     private RaceView view;
@@ -78,6 +80,21 @@ public class RaceController {
         // Dynamically create typists based on the number of seats selected, with random speeds to create variability among typists
         for (int i = 1; i <= seats; i++) {
             Typist t = new Typist("Player " + i);
+
+            switch (i % 4) { // Assign different typing styles based on the typist's index to create diversity in typing behavior
+                case 0:
+                    t.setTypingStyle(TypingStyle.TOUCH_TYPIST);
+                    break;
+                case 1:
+                    t.setTypingStyle(TypingStyle.HUNT_AND_PECK);
+                    break;
+                case 2:
+                    t.setTypingStyle(TypingStyle.PHONE_THUMBS);
+                    break;
+                case 3:
+                    t.setTypingStyle(TypingStyle.VOICE_TO_TEXT);
+                    break;
+            }
 
             // Assign random speeds to typists to create variability, with a base speed of 0.7 and a random addition up to 1.0
             t.setSpeed(0.7 + Math.random()); 
