@@ -69,6 +69,7 @@ public class RaceController {
 
     // Simulate the typing progress by advancing through the passage and updating the display with a cursor
     private void handleStart() {
+        long startTime = System.currentTimeMillis();
 
         if (model.getPassage().isEmpty()) {
             view.getStatusLabel().setText("Please select a passage first.");
@@ -104,6 +105,7 @@ public class RaceController {
         model.setNightShift(view.getNightShiftCheck().isSelected());
 
         view.getStatusLabel().setText("Race started!");
+        view.getResultsLabel().setText(""); // Clear previous results
 
         final int[] tick = {0}; 
 
@@ -200,14 +202,42 @@ public class RaceController {
                 view.getLanesBox().getChildren().add(container); // Add the container to the lanes box in the view to display the typist's progress
             }
 
+            Typist winner = null;
+
             for (Typist t : model.getTypists()) {
                 if (t.getPosition() >= passage.length()) {
+                    winner = t;
                     timeline.stop(); // Stop the timeline when a typist reaches the end of the passage
-
-                    view.getStatusLabel().setText(t.getName() + " wins!"); // Update status label to announce the winner
-
-                    break; // Break instead of return to ensure the timeline is properly stopped and the UI updates with the winner announcement
+                    break;
                 }
+            }
+
+            if (winner != null) {
+                long endTime = System.currentTimeMillis();
+                double minutes = (endTime - startTime) / 60000.0; // Calculate time taken in minutes
+
+                StringBuilder results = new StringBuilder();
+
+                results.append("Winner: ").append(winner.getName()).append("\n");
+
+                results.append("Results:\n");
+
+                for (Typist typist : model.getTypists()) {
+                    double wpm = typist.getPosition() / 5.0 / minutes; // Calculate WPM based on the number of characters typed and time taken
+
+                    if (typist == winner) {
+                        results.append("🏆 ");
+                    }
+
+                    results.append(typist.getName())
+                                .append(" | WPM: ").append(String.format("%.1f", wpm))
+                                .append(" | Accuracy: ").append(String.format("%.1f%%", typist.getAccuracyPercentage()))
+                                .append(" | Burnouts: ").append(typist.getBurnoutCount())
+                                .append(" | Accuracy Change: ").append(String.format("%.2f", typist.getAccuracyChange()))
+                                .append("\n");
+                }
+
+                view.getResultsLabel().setText(results.toString()); // Display the results in the status label
             }
         });
 

@@ -23,8 +23,17 @@ public class Typist {
     private String symbol = "A"; // Default symbol for the typist, can be set to different symbols for different typists
     private Color color = Color.BLACK; // Default color for the typist, can be set to different colors for different typists
 
+    // Performance Tracking
+    private int totalKeystrokes = 0;
+    private int correctKeystrokes = 0;
+    private int burnoutCount = 0;
+
+    private double initialAccuracy;
+
     public Typist(String name) {
         this.name = name;
+
+        this.initialAccuracy = accuracy; 
     }
 
     public void typeTick(boolean autocorrectEnabled) {
@@ -45,7 +54,10 @@ public class Typist {
 
         effectiveAccuracy = Math.min(1.0, effectiveAccuracy); // Ensure accuracy does not exceed 100%
 
+        totalKeystrokes++; // Increment total keystrokes for performance tracking
+
         if (Math.random() < effectiveAccuracy) { // If the typist types correctly based on their accuracy
+            correctKeystrokes++; // Increment correct keystrokes for performance tracking
             position += speed; // Move forward by the current speed
         } else {
             slideBack(autocorrectEnabled); // If they make a typo, they slide back, and the penalty is reduced if autocorrect is enabled
@@ -76,9 +88,11 @@ public class Typist {
         }
 
         // Random burnout trigger
-        if (Math.random() < 0.02 * getBurnoutModifier()) { // 2% chance to burn out each tick, modified by the typist's burnout modifier
+        if (Math.random() < burnoutChance) { // If the random number is less than the burnout chance, the typist burns out
             burntOut = true;
             burnoutTimer = 10; // Burnout lasts for 10 ticks
+
+            burnoutCount++; // Increment burnout count for performance tracking
         }
     }
 
@@ -199,5 +213,21 @@ public class Typist {
 
     public double getAccuracy() {
         return accuracy;
+    }
+
+    public double getAccuracyPercentage() {
+        if (totalKeystrokes == 0) {
+            return 0; // Avoid division by zero, return 0% accuracy if no keystrokes have been made
+        }
+
+        return (correctKeystrokes * 100.0) / totalKeystrokes; // Return accuracy as a percentage based on the number of correct keystrokes out of total keystrokes
+    }
+
+    public int getBurnoutCount() {
+        return burnoutCount; // Get the total number of times the typist has burnt out, which can be used for performance tracking and display purposes
+    }
+
+    public double getAccuracyChange() {
+        return accuracy - initialAccuracy; // Get the change in accuracy from the initial value, which can be used to show how different modifiers have affected the typist's performance
     }
 }

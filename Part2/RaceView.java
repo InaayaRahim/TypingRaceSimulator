@@ -35,6 +35,8 @@ public class RaceView {
 
     private Label passageDisplay = new Label(); // Label to display the passage, replaced by lanesBox for multiple typists
 
+    private Label resultsLabel = new Label();
+
     // Constructor takes the RaceState to allow for future updates based on state changes
     public RaceView(RaceModel model) {
         // Set up passage selector
@@ -62,6 +64,8 @@ public class RaceView {
 
         rebuildPlayerConfigs(seatSelector.getValue()); // Initial build of player configurations based on default number of typists
 
+        resultsLabel.setWrapText(true); // Allow results text to wrap within the label
+
         // Lanes area replaces single passage display to allow for multiple typists
         root.getChildren().addAll(
             statusLabel,
@@ -80,7 +84,9 @@ public class RaceView {
 
             startButton,
             passageDisplay,
-            lanesBox
+            lanesBox,
+
+            resultsLabel
         );
     }
 
@@ -149,6 +155,10 @@ public class RaceView {
 
     public List<PlayerConfig> getPlayerConfigs() {
         return playerConfigs;
+    }
+
+    public Label getResultsLabel() {
+        return resultsLabel;
     }
 }
 
