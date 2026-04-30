@@ -8,11 +8,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
+import java.util.ArrayList;
 
 import Part2.TypingStyle;
 import Part2.KeyboardType;
 
 import java.security.Key;
+import java.util.List;
 
 import Part2.Accessory;
 
@@ -34,11 +36,6 @@ public class RaceController {
         view.getStartButton().setOnAction(e -> handleStart());
 
         view.getCompareButton().setOnAction(e -> handleComparison());
-
-        for (Typist t : model.getTypists()) {
-            view.getPlayerASelector().getItems().add(t.getName());
-            view.getPlayerBSelector().getItems().add(t.getName());
-        }
     }
 
     // Handle the passage selection by updating the model with the chosen passage and updating the view accordingly
@@ -226,6 +223,34 @@ public class RaceController {
             }
 
             if (winner != null) {
+                
+                List<Typist> sorted = new ArrayList<>(model.getTypists());
+                sorted.sort((a, b) -> Integer.compare(b.getPosition(), a.getPosition())); // Sort typists by their position to determine the current standings
+
+                for (int i = 0; i < sorted.size(); i++) {
+                    Typist t = sorted.get(i);
+                    
+                    int points;
+
+                    if (i == 0) {
+                        points = 3; // First place gets 3 points
+                    } else if (i == 1) {
+                        points = 2; // Second place gets 2 points
+                    } else if (i == 2) {
+                        points = 1; // Third place gets 1 point
+                    } else {
+                        points = 0; // No points for others
+                    }
+
+                    if (t.isBurntOut()) {
+                        points -= 1; // Burnout penalty
+                    }
+
+                    model.addPoints(t.getName(), points); // Update the leaderboard with points for each typist based on their finishing position and burnout status
+                }
+            }
+
+            if (winner != null) {
                 long endTime = System.currentTimeMillis();
                 double minutes = (endTime - startTime) / 60000.0; // Calculate time taken in minutes
 
@@ -271,9 +296,15 @@ public class RaceController {
                                 .append(typist.getBurnoutCount())
                                 .append(" | Accuracy Change: ")
                                 .append(String.format("%.2f", typist.getAccuracyChange()));
-                                
+
                     results.append(line).append("\n");
                 }
+
+                results.append("\nLeaderboard:\n");
+
+                model.getLeaderboard().entrySet().stream()
+                    .sorted((a, b) -> b.getValue() - a.getValue())
+                    .forEach(entry -> results.append(entry.getKey() + " → " + entry.getValue() + " points\n")); // Append the current leaderboard standings to the results output
 
                 StringBuilder historyOutput = new StringBuilder();
 
@@ -334,7 +365,7 @@ public class RaceController {
 
         switch (metric) {
             case "WPM":
-                result = a.getName() + ": " + String.format("%.1f", a.getSpeed()) + " vs " + b.getName() + ": " + String.format("%.1f", b.getSpeed());
+                result = a.getName() + ": " + String.format("%.1f", a.getPosition() / 5.0) + " vs " + b.getName() + ": " + String.format("%.1f", b.getPosition() / 5.0);
                 break;
             
             case "Accuracy":
