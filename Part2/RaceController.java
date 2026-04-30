@@ -148,7 +148,7 @@ public class RaceController {
                 // Burnout System
                 t.updateBurnout(); // Update burnout status for each typist
 
-                t.moveForward(); // Move each typist forward based on their speed
+                t.typeTick(model.isAutocorrect());; // Move each typist forward based on their speed
             }
 
             // redraw lanes

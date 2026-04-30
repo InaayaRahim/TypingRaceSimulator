@@ -1,11 +1,15 @@
 package Part2;
 
+import Part2.TypingStyle;
+
 public class Typist {
     private String name;
     private double position = 0; // Position in terms of characters typed, can be a double to allow for speed adjustments
     
     private double baseSpeed = 1.0; // Permanent speed
     private double speed = 1.0; // Current speed, which can be modified by different modes (e.g., caffeine, night shift)
+
+    private double accuracy = 0.9; // default accuracy, can be adjusted for different typists and can affect the chance of sliding back due to typos
 
     private boolean burntOut = false; // Flag to indicate if the typist has burnt out
     private int burnoutTimer = 0; // Timer to track how long the typist has been burning out
@@ -16,18 +20,23 @@ public class Typist {
         this.name = name;
     }
 
-    public void moveForward() {
+    public void typeTick(boolean autocorrectEnabled) {
         if (burntOut) {
-            return; // If the typist is burnt out, they cannot move forward
+            updateBurnout(); // If the typist is burnt out, we need to update the burnout status and skip moving forward
+            return;
         }
 
-        position+= speed; // Move forward by the speed amount, which can be adjusted for different typists
+        if (Math.random() < accuracy) { // If the typist types correctly based on their accuracy
+            position += speed; // Move forward by the current speed
+        } else {
+            slideBack(autocorrectEnabled); // If they make a typo, they slide back, and the penalty is reduced if autocorrect is enabled
+        }
     }
 
     public void slideBack(boolean autocorrectEnabled) {
         double penalty = autocorrectEnabled ? 0.5 : 1.0; // If autocorrect is enabled, the penalty for sliding back is reduced by half
 
-        position = Math.max(0, position - 1); // Ensure position does not go below 0
+        position = Math.max(0, position - penalty); // Ensure position does not go below 0
     }
 
     public void updateBurnout() {
@@ -65,6 +74,21 @@ public class Typist {
 
     public void setTypingStyle(TypingStyle style) {
         this.style = style; // Set the typing style for the typist, which can affect their burnout chance and potentially other factors in the future
+
+        switch (style) {
+            case TOUCH_TYPIST:
+                this.accuracy = 0.95; // Touch typists have high accuracy
+                break;
+            case HUNT_AND_PECK:
+                this.accuracy = 0.75; // Hunt and peck typists have lower accuracy
+                break;
+            case PHONE_THUMBS:
+                this.accuracy = 0.85; // Phone thumbs users have moderate accuracy
+                break;
+            case VOICE_TO_TEXT:
+                this.accuracy = 0.98; // Voice to text users have high accuracy, but can still make mistakes due to misrecognition
+                break;
+        }
     }
 
     public TypingStyle getTypingStyle() {
@@ -98,5 +122,9 @@ public class Typist {
 
     public boolean isBurntOut() {
         return burntOut;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
     }
 }
