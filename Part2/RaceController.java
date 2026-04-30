@@ -354,6 +354,21 @@ public class RaceController {
                             .append("\n");
                     }
 
+                    if (t.getHistory().size() >= 2) {
+                        int size = t.getHistory().size();
+
+                        double last = t.getHistory().get(size - 1).getWpm();
+                        double prev = t.getHistory().get(size - 2).getWpm();
+
+                        if (last > prev) {
+                            historyOutput.append(" ↑ Improving\n");
+                        } else if (last < prev) {
+                            historyOutput.append(" ↓ Declining\n");
+                        } else {
+                            historyOutput.append(" → Stable\n");
+                        }
+                    }
+
                     historyOutput.append("\n");
                 }
 
