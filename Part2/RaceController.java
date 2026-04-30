@@ -32,6 +32,13 @@ public class RaceController {
 
         view.getPassageSelector().setOnAction(e -> handleSelection());
         view.getStartButton().setOnAction(e -> handleStart());
+
+        view.getCompareButton().setOnAction(e -> handleComparison());
+
+        for (Typist t : model.getTypists()) {
+            view.getPlayerASelector().getItems().add(t.getName());
+            view.getPlayerBSelector().getItems().add(t.getName());
+        }
     }
 
     // Handle the passage selection by updating the model with the chosen passage and updating the view accordingly
@@ -102,6 +109,8 @@ public class RaceController {
 
             model.addTypist(t);
         }
+
+        updatePlayerSelectors(); // Update the player selectors in the view to reflect the newly created typists
 
         // Set modifiers based on the state of the checkboxes in the view
         model.setAutocorrect(view.getAutocorrectCheck().isSelected());
@@ -293,5 +302,60 @@ public class RaceController {
         timeline.setCycleCount(Timeline.INDEFINITE); // Run indefinitely until a winner is declared
 
         timeline.play();
+    }
+
+    private void handleComparison() {
+        String playerA = view.getPlayerASelector().getValue();
+        String playerB = view.getPlayerBSelector().getValue();
+
+        String metric = view.getMetricSelector().getValue();
+
+        if (playerA == null || playerB == null) {
+            view.getComparisonLabel().setText("Please select two players.");
+            return;
+        }
+
+        Typist a = null;
+        Typist b = null;
+
+        for (Typist t : model.getTypists()) {
+            if (t.getName().equals(playerA)) {
+                a = t;
+            } else if (t.getName().equals(playerB)) {
+                b = t;
+            }
+        }
+
+        if (a == null || b == null) {
+            return;
+        }
+
+        String result = "";
+
+        switch (metric) {
+            case "WPM":
+                result = a.getName() + ": " + String.format("%.1f", a.getSpeed()) + " vs " + b.getName() + ": " + String.format("%.1f", b.getSpeed());
+                break;
+            
+            case "Accuracy":
+                result = a.getName() + ": " + String.format("%.1f%%", a.getAccuracyPercentage()) + " vs " + b.getName() + ": " + String.format("%.1f%%", b.getAccuracyPercentage());
+                break;
+
+            case "Burnouts":
+                result = a.getName() + ": " + a.getBurnoutCount() + " vs " + b.getName() + ": " + b.getBurnoutCount();
+                break;
+        }
+
+        view.getComparisonLabel().setText(result); // Update the comparison label in the view with the results of the comparison between the two selected players based on the chosen metric
+    }
+
+    private void updatePlayerSelectors() {
+        view.getPlayerASelector().getItems().clear();
+        view.getPlayerBSelector().getItems().clear();
+
+        for (Typist t : model.getTypists()) {
+            view.getPlayerASelector().getItems().add(t.getName());
+            view.getPlayerBSelector().getItems().add(t.getName());
+        }
     }
 }

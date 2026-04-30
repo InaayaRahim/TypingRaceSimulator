@@ -5,13 +5,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 import java.util.List;
 import java.util.ArrayList;
+import javafx.scene.control.ScrollPane;
 
 import Part2.TypingStyle;
 import Part2.Accessory;
 import Part2.KeyboardType;
 
 public class RaceView {
-    private VBox root = new VBox(10); // Vertical box with spacing of 10 pixels
+    private VBox rootContent = new VBox(10); // Main container for the view
+    private ScrollPane root = new ScrollPane(rootContent); // Scrollable root to accommodate all UI components
 
     // UI components
     private ComboBox<String> passageSelector = new ComboBox<>();
@@ -36,6 +38,12 @@ public class RaceView {
     private Label passageDisplay = new Label(); // Label to display the passage, replaced by lanesBox for multiple typists
 
     private Label resultsLabel = new Label();
+
+    private ComboBox<String> metricSelector = new ComboBox<>(); // ComboBox for selecting the metric to display in results
+    private ComboBox<String> playerASelector = new ComboBox<>(); // ComboBox for selecting Player A in results
+    private ComboBox<String> playerBSelector = new ComboBox<>(); // ComboBox for selecting Player B in results
+    private Button compareButton = new Button("Compare Players"); // Button to trigger player comparison in results
+    private Label comparisonLabel = new Label(); // Label to display the results of player comparison
 
     // Constructor takes the RaceState to allow for future updates based on state changes
     public RaceView(RaceModel model) {
@@ -66,8 +74,11 @@ public class RaceView {
 
         resultsLabel.setWrapText(true); // Allow results text to wrap within the label
 
+        metricSelector.getItems().addAll("WPM", "Accuracy", "Burnouts");
+        metricSelector.setValue("WPM"); // Default metric to display in results
+
         // Lanes area replaces single passage display to allow for multiple typists
-        root.getChildren().addAll(
+        rootContent.getChildren().addAll(
             statusLabel,
             passageSelector,
             customInput,
@@ -86,7 +97,14 @@ public class RaceView {
             passageDisplay,
             lanesBox,
 
-            resultsLabel
+            resultsLabel,
+
+            new Label("Results Comparison:"),
+            playerASelector,
+            playerBSelector,
+            metricSelector,
+            compareButton,
+            comparisonLabel
         );
     }
 
@@ -109,7 +127,7 @@ public class RaceView {
     }
 
     // Getters for UI components to allow the controller to interact with them
-    public VBox getRoot() {
+    public ScrollPane getRoot() {
         return root;
     }
     
@@ -159,6 +177,26 @@ public class RaceView {
 
     public Label getResultsLabel() {
         return resultsLabel;
+    }
+
+    public ComboBox<String> getMetricSelector() {
+        return metricSelector;
+    }
+
+    public ComboBox<String> getPlayerASelector() {
+        return playerASelector;
+    }
+
+    public ComboBox<String> getPlayerBSelector() {
+        return playerBSelector;
+    }
+
+    public Button getCompareButton() {
+        return compareButton;
+    }
+
+    public Label getComparisonLabel() {
+        return comparisonLabel;
     }
 }
 
