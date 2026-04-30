@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import Part2.TypingStyle;
 import Part2.KeyboardType;
+import Part2.PlayerConfig;
 
 import java.security.Key;
 import java.util.List;
@@ -81,7 +82,6 @@ public class RaceController {
         }
 
         model.resetTypists();
-        model.getTypists().clear(); // Clear existing typists before adding new ones based on seat selection
 
         for (Typist t : model.getTypists()) {
             t.resetForRace();
@@ -90,26 +90,31 @@ public class RaceController {
         int seats = view.getSeatSelector().getValue(); // Get the number of typists from the seat selector
 
         // Dynamically create typists based on the number of seats selected, with random speeds to create variability among typists
-        for (int i = 0; i < seats; i++) {
-            PlayerConfig config = view.getPlayerConfigs().get(i); // Get the player configuration for this typist
+        if (model.getTypists().isEmpty()) { // Only create typists if they haven't been created already
+            for (int i = 0; i < seats; i++) {
+                PlayerConfig config = view.getPlayerConfigs().get(i);
 
-            Typist t = new Typist("Player " + (i + 1)); // Create a new typist with a name based on the player number
+                Typist t = new Typist("Player " + (i + 1));
 
-            t.setTypingStyle(config.getStyle()); // Set the typing style for the typist based on the selection in the view
-            t.setKeyboardType(config.getKeyboard()); // Set the keyboard type for the typist based on the selection in the view
-            t.setAccessory(config.getAccessory()); // Set the accessory for the typist based on the selection in the view
+                t.setTypingStyle(config.getStyle());
+                t.setKeyboardType(config.getKeyboard());
+                t.setAccessory(config.getAccessory());
+                t.setSymbol(config.getSymbol());
+                t.setColor(config.getColor());
 
-            t.setSymbol(config.getSymbol()); // Set the symbol for the typist based on the input in the view
-            t.setColor(config.getColor()); // Set the color for the typist based on the selection in the view
+                double base = 0.7 + Math.random();
 
-            double base = 0.7 + Math.random(); // Base speed with some randomness to create variability among typists
+                base *= t.getAccuracyModifier();
 
-            // rank affects speed, with higher ranks generally being faster
-            base *= t.getAccuracyModifier(); 
+                t.setSpeed(base);
 
-            t.setSpeed(base);
+                model.addTypist(t); // Add the newly created typist to the model's list of typists
+            }
+        }
 
-            model.addTypist(t);
+        // Resets position, burnout etc but keeps history
+        for (Typist t : model.getTypists()) {
+            t.resetForRace();
         }
 
         updatePlayerSelectors(); // Update the player selectors in the view to reflect the newly created typists
