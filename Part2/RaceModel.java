@@ -105,4 +105,27 @@ public class RaceModel {
     public void addPoints(String typistName, int points) {
         leaderboard.put(typistName, leaderboard.getOrDefault(typistName, 0) + points); // Add points to the typist's total in the leaderboard
     }
+
+    public void updateTitles(List<Typist> typists, Typist winner) {
+        for (Typist t : typists) {
+            // Win Tracking
+            if (t == winner) {
+                t.setConsecutiveWins(t.getConsecutiveWins() + 1); // Increment the consecutive wins for the winner
+                t.setTotalWins(t.getTotalWins() + 1); // Increment the total wins for the winner
+            } else {
+                t.setConsecutiveWins(0); // Reset the consecutive wins for the other typists
+            }
+
+            // Title Assignment
+            if (t.getConsecutiveWins() >= 3) {
+                t.setTitle("Speed Demon"); 
+            } else if (t.getRacesWithoutBurnout() >= 5) {
+                t.setTitle("Iron Fingers");  
+            } else if (t.getTotalWins() >= 5) {
+                t.setTitle("Veteran Typis");
+            } else {
+                t.setTitle("Rookie"); // Assign the "Rookie" title to all other typists
+            }
+        }
+    }
 }

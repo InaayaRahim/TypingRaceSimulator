@@ -36,6 +36,11 @@ public class Typist {
 
     private double lastWpm;
 
+    private int consecutiveWins = 0; // Track consecutive wins for the typist, which can be used for performance tracking and display purposes
+    private int totalWins = 0; // Track total wins for the typist, which can be used for performance tracking and display purposes
+    private int racesWithoutBurnout = 0; 
+    private String title = "Rookie"; // Default title for the typist, can be updated based on performance and achievements
+
     public Typist(String name) {
         this.name = name;
 
@@ -256,5 +261,46 @@ public class Typist {
 
     public double getLastWpm() {
         return lastWpm;
+    }
+
+    public int getConsecutiveWins() {
+        return consecutiveWins;
+    }
+
+    public void setConsecutiveWins(int consecutiveWins) {
+        this.consecutiveWins = consecutiveWins;
+    }
+
+    public int getTotalWins() {
+        return totalWins;
+    }
+
+    public void setTotalWins(int totalWins) {
+        this.totalWins = totalWins;
+    }
+
+    public int getRacesWithoutBurnout() {
+        return racesWithoutBurnout;
+    }
+
+    public void setRacesWithoutBurnout(int racesWithoutBurnout) {
+        this.racesWithoutBurnout = racesWithoutBurnout;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void resetRaceStats() {
+        if (this.isBurntOut()) {
+            racesWithoutBurnout = 0;
+        }
+        else {
+            racesWithoutBurnout++;
+        }
     }
 }

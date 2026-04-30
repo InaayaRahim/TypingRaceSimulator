@@ -251,6 +251,9 @@ public class RaceController {
             }
 
             if (winner != null) {
+
+                model.updateTitles(model.getTypists(), winner);
+
                 long endTime = System.currentTimeMillis();
                 double minutes = (endTime - startTime) / 60000.0; // Calculate time taken in minutes
 
@@ -284,7 +287,8 @@ public class RaceController {
                     }
 
                     line.append(typist.getName())
-                            .append(" | WPM: ").append(String.format("%.1f", wpm));
+                            .append(" | WPM: ").append(String.format("%.1f", wpm))
+                            .append(" | Title: ").append(typist.getTitle());
 
                     if (isPB) {
                         line.append(" (PB!)"); // Indicate if the typist achieved a new personal best
