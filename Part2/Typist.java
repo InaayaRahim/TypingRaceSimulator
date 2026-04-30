@@ -67,6 +67,10 @@ public class Typist {
         this.style = style; // Set the typing style for the typist, which can affect their burnout chance and potentially other factors in the future
     }
 
+    public TypingStyle getTypingStyle() {
+        return style; // Get the current typing style of the typist, which can be used to determine their burnout modifier and other characteristics
+    }
+
     public int getPosition() {
         return (int) Math.floor(position); // convert to int for display purposes, but internally we can keep it as a double for more precise movement
     }

@@ -180,7 +180,7 @@ public class RaceController {
 
                 String visual = passage.substring(0, pos) + "|" + passage.substring(pos); // Add a cursor to indicate current position
 
-                String name = t.getName();
+                String name = t.getName() + " (" + t.getTypingStyle() + ")"; // Include the typist's name and typing style in the label
 
                 if (t.isBurntOut()) {
                     name += " (Burnt Out)"; // Indicate if the typist is currently burnt out
