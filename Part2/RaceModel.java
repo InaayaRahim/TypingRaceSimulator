@@ -20,6 +20,8 @@ public class RaceModel {
 
     private Map<String, Double> personalBests = new HashMap<>(); // Map to track personal best times for each typist
 
+    private Map<String, Integer> leaderboard = new HashMap<>(); // Map to track leaderboard standings based on WPM
+
     // Set the passage and update the passage length and reset the current index for tracking progress
     public void setPassage(String passage) {
         this.passage = passage;
@@ -94,5 +96,13 @@ public class RaceModel {
         }
 
         return false; // Return false to indicate that the personal best was not updated
+    }
+
+    public Map<String, Integer> getLeaderboard() {
+        return leaderboard;
+    }
+
+    public void addPoints(String typistName, int points) {
+        leaderboard.put(typistName, leaderboard.getOrDefault(typistName, 0) + points); // Add points to the typist's total in the leaderboard
     }
 }
