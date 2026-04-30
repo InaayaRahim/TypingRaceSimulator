@@ -225,16 +225,32 @@ public class RaceController {
                 for (Typist typist : model.getTypists()) {
                     double wpm = typist.getPosition() / 5.0 / minutes; // Calculate WPM based on the number of characters typed and time taken
 
+                    boolean isPB = model.updatePersonalBest(typist.getName(), wpm); // Update personal best for the typist and check if it's a new record
+                    double best = model.getPersonalBest(typist.getName()); // Get the current personal best for the typist
+
+                    StringBuilder line = new StringBuilder();
+
                     if (typist == winner) {
-                        results.append("🏆 ");
+                        line.append("🏆 ");
                     }
 
-                    results.append(typist.getName())
-                                .append(" | WPM: ").append(String.format("%.1f", wpm))
-                                .append(" | Accuracy: ").append(String.format("%.1f%%", typist.getAccuracyPercentage()))
-                                .append(" | Burnouts: ").append(typist.getBurnoutCount())
-                                .append(" | Accuracy Change: ").append(String.format("%.2f", typist.getAccuracyChange()))
-                                .append("\n");
+                    line.append(typist.getName())
+                            .append(" | WPM: ").append(String.format("%.1f", wpm));
+
+                    if (isPB) {
+                        line.append(" (PB!)"); // Indicate if the typist achieved a new personal best
+                    } else {
+                        line.append(" (Best: ").append(String.format("%.1f", best)).append(" )"); // Display the current personal best if it exists
+                    }
+
+                    line.append(" | Acc: ")
+                                .append(String.format("%.1f%%", typist.getAccuracyPercentage()))
+                                .append(" | Burnouts: ")
+                                .append(typist.getBurnoutCount())
+                                .append(" | Accuracy Change: ")
+                                .append(String.format("%.2f", typist.getAccuracyChange()));
+                                
+                    results.append(line).append("\n");
                 }
 
                 view.getResultsLabel().setText(results.toString()); // Display the results in the status label

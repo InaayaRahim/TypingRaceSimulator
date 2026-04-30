@@ -2,6 +2,8 @@ package Part2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RaceModel {
     
@@ -15,6 +17,8 @@ public class RaceModel {
     private boolean autocorrect = false;
     private boolean caffeineMode = false;
     private boolean nightShift = false;
+
+    private Map<String, Double> personalBests = new HashMap<>(); // Map to track personal best times for each typist
 
     // Set the passage and update the passage length and reset the current index for tracking progress
     public void setPassage(String passage) {
@@ -75,5 +79,20 @@ public class RaceModel {
 
     public boolean isNightShift() {
         return nightShift;
+    }
+
+    public double getPersonalBest(String name) {
+        return personalBests.getOrDefault(name, 0.0); // Return the personal best time for the typist
+    }
+
+    public boolean updatePersonalBest(String name, double wpm) {
+        double currentBest = personalBests.getOrDefault(name, 0.0); // Get the current personal best time for the typist, or 0.0 if they don't have one yet
+
+        if (wpm > currentBest) { // If the new WPM is better than the current personal best, update it
+            personalBests.put(name, wpm);
+            return true; // Return true to indicate that a new personal best was set
+        }
+
+        return false; // Return false to indicate that the personal best was not updated
     }
 }
