@@ -263,6 +263,8 @@ public class RaceController {
                 for (Typist typist : model.getTypists()) {
                     double wpm = typist.getPosition() / 5.0 / minutes; // Calculate WPM based on the number of characters typed and time taken
 
+                    typist.setLastWpm(wpm);
+
                     RaceRecord record = new RaceRecord(
                         wpm,
                         typist.getAccuracyPercentage(),
@@ -365,7 +367,7 @@ public class RaceController {
 
         switch (metric) {
             case "WPM":
-                result = a.getName() + ": " + String.format("%.1f", a.getPosition() / 5.0) + " vs " + b.getName() + ": " + String.format("%.1f", b.getPosition() / 5.0);
+                result = a.getName() + ": " + String.format("%.1f", a.getLastWpm()) + " vs " + b.getName() + ": " + String.format("%.1f", b.getLastWpm());
                 break;
             
             case "Accuracy":

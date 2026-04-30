@@ -34,6 +34,8 @@ public class Typist {
 
     private List<RaceRecord> history = new ArrayList<>();
 
+    private double lastWpm;
+
     public Typist(String name) {
         this.name = name;
 
@@ -246,5 +248,13 @@ public class Typist {
     public void resetForRace() {
         burnoutTimer = 0;
         burntOut = false;
+    }
+
+    public void setLastWpm(double wpm) {
+        this.lastWpm = wpm;
+    }
+
+    public double getLastWpm() {
+        return lastWpm;
     }
 }
