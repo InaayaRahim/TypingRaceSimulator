@@ -266,9 +266,12 @@ public class RaceController {
 
                 StringBuilder results = new StringBuilder();
 
-                results.append("Winner: ").append(winner.getName()).append("\n");
+                // Header for the results section
+                results.append("====================\n");
+                results.append("RACE RESULTS\n");
+                results.append("====================\n\n");
 
-                results.append("Results:\n");
+                results.append("Winner: ").append(winner.getName()).append("\n\n");
 
                 for (Typist typist : model.getTypists()) {
                     double wpm = typist.getPosition() / 5.0 / minutes; // Calculate WPM based on the number of characters typed and time taken
@@ -289,32 +292,38 @@ public class RaceController {
 
                     StringBuilder line = new StringBuilder();
 
+                    line.append("-------------------------\n");
+
                     if (typist == winner) {
                         line.append("🏆 ");
                     }
 
-                    line.append(typist.getName())
-                            .append(" | WPM: ").append(String.format("%.1f", wpm))
-                            .append(" | Title: ").append(typist.getTitle())
-                            .append(" | Rank: ").append(typist.getRank());
+                    line.append(typist.getName()).append("\n");
+
+                    line.append("WPM: ").append(String.format("%.1f", wpm))
+                        .append(" | Acc: ").append(String.format("%.1f%%", typist.getAccuracyPercentage()))
+                        .append(" | Burnouts: ").append(typist.getBurnoutCount())
+                        .append("\n");
+
+                    line.append("Title: ").append(typist.getTitle())
+                        .append(" | Rank: ").append(typist.getRank())
+                        .append("\n");
+
+                    line.append("Accuracy Change: ")
+                        .append(String.format("%.2f", typist.getAccuracyChange()));
 
                     if (isPB) {
-                        line.append(" (PB!)"); // Indicate if the typist achieved a new personal best
+                        line.append(" ⭐️ PB!"); // Indicate if the typist achieved a new personal best
                     } else {
                         line.append(" (Best: ").append(String.format("%.1f", best)).append(" )"); // Display the current personal best if it exists
                     }
 
-                    line.append(" | Acc: ")
-                                .append(String.format("%.1f%%", typist.getAccuracyPercentage()))
-                                .append(" | Burnouts: ")
-                                .append(typist.getBurnoutCount())
-                                .append(" | Accuracy Change: ")
-                                .append(String.format("%.2f", typist.getAccuracyChange()));
-
                     results.append(line).append("\n");
                 }
 
-                results.append("\nLeaderboard:\n");
+                results.append("====================\n");
+                results.append("LEADERBOARD\n");
+                results.append("====================\n\n");
 
                 model.getLeaderboard().entrySet().stream()
                     .sorted((a, b) -> b.getValue() - a.getValue())
@@ -322,17 +331,21 @@ public class RaceController {
 
                 StringBuilder historyOutput = new StringBuilder();
 
+                historyOutput.append("====================\n");
+                historyOutput.append("RACE HISTORY\n");
+                historyOutput.append("====================\n\n");
+
                 for (Typist t : model.getTypists()) {
                     historyOutput.append(t.getName()).append("\n");
 
+                    int raceNum = 1;
+
                     for (RaceRecord r : t.getHistory()) {
-                        historyOutput.append("Race → WPM ")
-                                .append(String.format("%.1f", r.getWpm()))
-                                .append(" | Acc: ")
-                                .append(String.format("%.1f%%", r.getAccuracy()))
-                                .append(" | Burnouts: ")
-                                .append(r.getBurnouts())
-                                .append("\n");
+                        historyOutput.append(" Race ").append(raceNum++).append(": ")
+                            .append(": WPM: ").append(String.format("%.1f", r.getWpm()))
+                            .append(" | Acc: ").append(String.format("%.1f%%", r.getAccuracy()))
+                            .append(" | Burnouts: ").append(r.getBurnouts())
+                            .append("\n");
                     }
 
                     historyOutput.append("\n");
