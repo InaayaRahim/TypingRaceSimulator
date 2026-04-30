@@ -41,6 +41,9 @@ public class Typist {
     private int racesWithoutBurnout = 0; 
     private String title = "Rookie"; // Default title for the typist, can be updated based on performance and achievements
 
+    private String rank = "Bronze";
+    private double accuracyModifier = 1.0;
+
     public Typist(String name) {
         this.name = name;
 
@@ -302,5 +305,21 @@ public class Typist {
         else {
             racesWithoutBurnout++;
         }
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public double getAccuracyModifier() {
+        return accuracyModifier;
+    }
+
+    public void setAccuracyModifier(double accuracyModifier) {
+        this.accuracyModifier = accuracyModifier;
     }
 }

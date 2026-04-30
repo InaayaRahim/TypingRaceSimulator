@@ -102,7 +102,12 @@ public class RaceController {
             t.setSymbol(config.getSymbol()); // Set the symbol for the typist based on the input in the view
             t.setColor(config.getColor()); // Set the color for the typist based on the selection in the view
 
-            t.setSpeed(0.7 + Math.random());
+            double base = 0.7 + Math.random(); // Base speed with some randomness to create variability among typists
+
+            // rank affects speed, with higher ranks generally being faster
+            base *= t.getAccuracyModifier(); 
+
+            t.setSpeed(base);
 
             model.addTypist(t);
         }
@@ -248,11 +253,13 @@ public class RaceController {
 
                     model.addPoints(t.getName(), points); // Update the leaderboard with points for each typist based on their finishing position and burnout status
                 }
+
+                model.updateTitles(model.getTypists(), winner);
+
+                model.updateRanks(model.getTypists());
             }
 
             if (winner != null) {
-
-                model.updateTitles(model.getTypists(), winner);
 
                 long endTime = System.currentTimeMillis();
                 double minutes = (endTime - startTime) / 60000.0; // Calculate time taken in minutes
@@ -288,7 +295,8 @@ public class RaceController {
 
                     line.append(typist.getName())
                             .append(" | WPM: ").append(String.format("%.1f", wpm))
-                            .append(" | Title: ").append(typist.getTitle());
+                            .append(" | Title: ").append(typist.getTitle())
+                            .append(" | Rank: ").append(typist.getRank());
 
                     if (isPB) {
                         line.append(" (PB!)"); // Indicate if the typist achieved a new personal best

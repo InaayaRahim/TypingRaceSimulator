@@ -128,4 +128,27 @@ public class RaceModel {
             }
         }
     }
+
+    public void updateRanks(List<Typist> typists) {
+        for (Typist t : typists) {
+            int points = leaderboard.getOrDefault(t.getName(), 0); // Get the total points for the typist from the leaderboard, or 0 if they don't have any points
+
+            if (points >= 20) {
+                t.setRank("Diamond");
+                t.setAccuracyModifier(1.1); // Increase accuracy by 10% for Diamond rank
+            }
+            else if (points >= 12) {
+                t.setRank("Gold");
+                t.setAccuracyModifier(1.05); // Increase accuracy by 5% for Gold rank
+            }
+            else if (points >= 6) {
+                t.setRank("Silver");
+                t.setAccuracyModifier(1.0); // No accuracy modifier for Silver rank
+            }
+            else {
+                t.setRank("Bronze");
+                t.setAccuracyModifier(0.95); // Decrease accuracy by 5% for Bronze rank
+            }
+        }
+    }
 }
