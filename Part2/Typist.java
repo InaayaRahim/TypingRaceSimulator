@@ -1,6 +1,8 @@
 package Part2;
 
 import javafx.scene.paint.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 import Part2.TypingStyle;
 
@@ -29,6 +31,8 @@ public class Typist {
     private int burnoutCount = 0;
 
     private double initialAccuracy;
+
+    private List<RaceRecord> history = new ArrayList<>();
 
     public Typist(String name) {
         this.name = name;
@@ -229,5 +233,18 @@ public class Typist {
 
     public double getAccuracyChange() {
         return accuracy - initialAccuracy; // Get the change in accuracy from the initial value, which can be used to show how different modifiers have affected the typist's performance
+    }
+
+    public void addRaceRecord(RaceRecord record) {
+        history.add(record);
+    }
+
+    public List<RaceRecord> getHistory() {
+        return history;
+    }
+
+    public void resetForRace() {
+        burnoutTimer = 0;
+        burntOut = false;
     }
 }

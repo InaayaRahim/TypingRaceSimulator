@@ -79,6 +79,10 @@ public class RaceController {
         model.resetTypists();
         model.getTypists().clear(); // Clear existing typists before adding new ones based on seat selection
 
+        for (Typist t : model.getTypists()) {
+            t.resetForRace();
+        }
+
         int seats = view.getSeatSelector().getValue(); // Get the number of typists from the seat selector
 
         // Dynamically create typists based on the number of seats selected, with random speeds to create variability among typists
@@ -225,6 +229,15 @@ public class RaceController {
                 for (Typist typist : model.getTypists()) {
                     double wpm = typist.getPosition() / 5.0 / minutes; // Calculate WPM based on the number of characters typed and time taken
 
+                    RaceRecord record = new RaceRecord(
+                        wpm,
+                        typist.getAccuracyPercentage(),
+                        typist.getBurnoutCount(),
+                        typist.getPosition()
+                    );
+
+                    typist.addRaceRecord(record);
+
                     boolean isPB = model.updatePersonalBest(typist.getName(), wpm); // Update personal best for the typist and check if it's a new record
                     double best = model.getPersonalBest(typist.getName()); // Get the current personal best for the typist
 
@@ -253,7 +266,25 @@ public class RaceController {
                     results.append(line).append("\n");
                 }
 
-                view.getResultsLabel().setText(results.toString()); // Display the results in the status label
+                StringBuilder historyOutput = new StringBuilder();
+
+                for (Typist t : model.getTypists()) {
+                    historyOutput.append(t.getName()).append("\n");
+
+                    for (RaceRecord r : t.getHistory()) {
+                        historyOutput.append("Race → WPM ")
+                                .append(String.format("%.1f", r.getWpm()))
+                                .append(" | Acc: ")
+                                .append(String.format("%.1f%%", r.getAccuracy()))
+                                .append(" | Burnouts: ")
+                                .append(r.getBurnouts())
+                                .append("\n");
+                    }
+
+                    historyOutput.append("\n");
+                }
+
+                view.getResultsLabel().setText(results.toString() + "\n\n" + historyOutput.toString()); // Update the results label in the view with the formatted results for all typists
             }
         });
 
