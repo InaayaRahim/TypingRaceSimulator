@@ -11,6 +11,9 @@ import javafx.util.Duration;
 
 import Part2.TypingStyle;
 import Part2.KeyboardType;
+
+import java.security.Key;
+
 import Part2.Accessory;
 
 public class RaceController {
@@ -79,57 +82,19 @@ public class RaceController {
 
         int seats = view.getSeatSelector().getValue(); // Get the number of typists from the seat selector
 
+        TypingStyle selectedStyle = view.getStyleSelector().getValue(); // Get the selected typing style from the view
+        KeyboardType selectedKeyboard = view.getKeyboardSelector().getValue(); // Get the selected keyboard type from the view
+        Accessory selectedAccessory = view.getAccessorySelector().getValue(); // Get the selected accessory from the view
+
         // Dynamically create typists based on the number of seats selected, with random speeds to create variability among typists
         for (int i = 1; i <= seats; i++) {
             Typist t = new Typist("Player " + i);
 
-            switch (i % 4) { // Assign different typing styles based on the typist's index to create diversity in typing behavior
-                case 0:
-                    t.setTypingStyle(TypingStyle.TOUCH_TYPIST);
-                    break;
-                case 1:
-                    t.setTypingStyle(TypingStyle.HUNT_AND_PECK);
-                    break;
-                case 2:
-                    t.setTypingStyle(TypingStyle.PHONE_THUMBS);
-                    break;
-                case 3:
-                    t.setTypingStyle(TypingStyle.VOICE_TO_TEXT);
-                    break;
-            }
+            t.setTypingStyle(selectedStyle); // Set the typing style for the typist based on the selection in the view
+            t.setKeyboardType(selectedKeyboard); // Set the keyboard type for the typist based on the selection in the view
+            t.setAccessory(selectedAccessory); // Set the accessory for the typist based on the selection in the view
 
-            // Assign random speeds to typists to create variability, with a base speed of 0.7 and a random addition up to 1.0
-            t.setSpeed(0.7 + Math.random()); 
-
-            switch (i % 4) { // Assign different keyboard types based on the typist's index to create further diversity in typing behavior and potential future modifiers based on keyboard type
-                case 0:
-                    t.setKeyboardType(KeyboardType.MECHANICAL);
-                    break;
-                case 1:
-                    t.setKeyboardType(KeyboardType.MEMBRANE);
-                    break;
-                case 2:
-                    t.setKeyboardType(KeyboardType.TOUCHSCREEN);
-                    break;
-                case 3:
-                    t.setKeyboardType(KeyboardType.STENOGRAPHY);
-                    break;
-            }
-
-            switch (i % 4) { // Assign different accessories based on the typist's index to create even more diversity in typing behavior and potential future modifiers based on accessories
-                case 0:
-                    t.setAccessory(Accessory.NONE);
-                    break;
-                case 1:
-                    t.setAccessory(Accessory.WRIST_SUPPORT);
-                    break;
-                case 2:
-                    t.setAccessory(Accessory.ENERGY_DRINK);
-                    break;
-                case 3:
-                    t.setAccessory(Accessory.HEADPHONES);
-                    break;
-            }
+            t.setSpeed(0.7 + Math.random());
 
             model.addTypist(t);
         }
@@ -212,11 +177,11 @@ public class RaceController {
 
                 String visual = passage.substring(0, pos) + "|" + passage.substring(pos); // Add a cursor to indicate current position
 
-                String style = t.getTypingStyle().toString().replace("_", " ").toLowerCase(); // Get the typist's typing style as a string for display
-                String keyboard = t.getKeyboardType().toString().replace("_", " ").toLowerCase(); // Get the typist's keyboard type as a string for display
-                String accessory = t.getAccessory().toString().replace("_", " ").toLowerCase(); // Get the typist's accessory as a string for display
+                String styleText = t.getTypingStyle().toString().replace("_", " ").toLowerCase(); // Get the typist's typing style as a string for display
+                String keyboardText = t.getKeyboardType().toString().replace("_", " ").toLowerCase(); // Get the typist's keyboard type as a string for display
+                String accessoryText = t.getAccessory().toString().replace("_", " ").toLowerCase(); // Get the typist's accessory as a string for display
 
-                String name = t.getName() + " (" + style + ", " + keyboard + ", " + accessory + ")"; // Include the typist's name, typing style, and keyboard type in the label for display
+                String name = t.getName() + " (" + styleText + ", " + keyboardText + ", " + accessoryText + ")"; // Include the typist's name, typing style, and keyboard type in the label for display
 
                 if (t.isBurntOut()) {
                     name += " (Burnt Out)"; // Indicate if the typist is currently burnt out

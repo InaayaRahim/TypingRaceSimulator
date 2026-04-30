@@ -40,7 +40,7 @@ public class Typist {
 
         effectiveAccuracy = Math.min(1.0, effectiveAccuracy); // Ensure accuracy does not exceed 100%
 
-        if (Math.random() < accuracy) { // If the typist types correctly based on their accuracy
+        if (Math.random() < effectiveAccuracy) { // If the typist types correctly based on their accuracy
             position += speed; // Move forward by the current speed
         } else {
             slideBack(autocorrectEnabled); // If they make a typo, they slide back, and the penalty is reduced if autocorrect is enabled

@@ -4,6 +4,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 
+import Part2.TypingStyle;
+import Part2.Accessory;
+import Part2.KeyboardType;
+
 public class RaceView {
     private VBox root = new VBox(10); // Vertical box with spacing of 10 pixels
 
@@ -26,6 +30,10 @@ public class RaceView {
 
     private Label passageDisplay = new Label(); // Label to display the passage, replaced by lanesBox for multiple typists
 
+    private ComboBox<TypingStyle> styleSelector = new ComboBox<>();
+    private ComboBox<KeyboardType> keyboardSelector = new ComboBox<>();
+    private ComboBox<Accessory> accessorySelector = new ComboBox<>();
+
     // Constructor takes the RaceState to allow for future updates based on state changes
     public RaceView(RaceModel model) {
         // Set up passage selector
@@ -43,6 +51,15 @@ public class RaceView {
         seatSelector.getItems().addAll(2, 3, 4, 5, 6); 
         seatSelector.setValue(3); // Default to 3 typists
 
+        styleSelector.getItems().addAll(TypingStyle.values());
+        styleSelector.setValue(TypingStyle.TOUCH_TYPIST); // Default typing style
+
+        keyboardSelector.getItems().addAll(KeyboardType.values());
+        keyboardSelector.setValue(KeyboardType.MEMBRANE); // Default keyboard type
+
+        accessorySelector.getItems().addAll(Accessory.values());
+        accessorySelector.setValue(Accessory.NONE); // Default accessory
+
         passageDisplay.setWrapText(true); // Allow passage text to wrap within the label
 
         // Lanes area replaces single passage display to allow for multiple typists
@@ -58,10 +75,17 @@ public class RaceView {
             caffeineCheck,
             nightShiftCheck,
 
+            new Label("Typing Style:"),
+            styleSelector,
+
+            new Label("Keyboard Type:"),
+            keyboardSelector,
+
+            new Label("Accessory:"),
+            accessorySelector,
+
             startButton,
-
             passageDisplay,
-
             lanesBox
         );
     }
@@ -109,6 +133,18 @@ public class RaceView {
 
     public ComboBox<Integer> getSeatSelector() {
         return seatSelector;
+    }
+
+    public ComboBox<TypingStyle> getStyleSelector() {
+        return styleSelector;
+    }
+
+    public ComboBox<KeyboardType> getKeyboardSelector() {
+        return keyboardSelector;
+    }
+
+    public ComboBox<Accessory> getAccessorySelector() {
+        return accessorySelector;
     }
 }
 
