@@ -24,7 +24,7 @@ javac Typist.java TypingRace.java
 
 The race is started by calling `startRace()` on a `TypingRace` object.
 
-A simple way to test this is to add a `main` method to `TypingRace`. An example test setup:
+A simple way to test this is to add a `main` method to `TypingRace`. An example test setup can be added in TypingRace.java:
 
 ```java
 public static void main(String[] args) {
@@ -42,7 +42,7 @@ Then run:
 java TypingRace
 ```
 
-## Part 2 — GUI Simulation
+## Part 2 — GUI Simulation (JavaFX)
 
 ### How to compile
 
@@ -62,6 +62,15 @@ java --module-path /path/to/javafx-sdk/lib \
 --add-modules javafx.controls \
 -cp bin Part2.MainGUI
 ```
+### GUI Entry Point
+
+The GUI can be launched using:
+- Part2.MainGUI
+- Or via the method:
+
+```java
+MainGUI.startRaceGUI(args)
+```
 
 ### Features
 
@@ -75,10 +84,21 @@ Race Configuration
     - Night Shift
 
 Custom Typists
-- Typing styles (Touch Typist, Hunt & Peck, Phone Thumbs, Voice-to-Text)
-- Keyboard types (Mechanical, Membrane, Touchscreen, Stenography)
+- Typing styles:
+    - Touch Typist
+    - Hunt & Peck
+    - Phone Thumbs
+    - Voice-to-Text
+- Keyboard types: 
+    - Mechanical
+    - Membrane
+    - Touchscreen
+    - Stenography
 - Custom symbols and colours
-- Accessories affecting performance (Wrist Support, Energy Drink, Headphones)
+- Accessories affecting performance:
+    - Wrist Support
+    - Energy Drink
+    - Headphones
 - Attribution impact specified for each customisation choice
 
 Statistics System
@@ -119,9 +139,11 @@ Optional Analytics
 - All code is designed to run using command-line tools.
 - No IDE-specific configuration is required.
 - Part 2 builds a full GUI simulation on top of Part 1 mechanics.
+- The GUI is launched via MainGUI, with an additional startRaceGUI() method included for specification compliance.
 
 ## Git Workflow
 
 - Main branch contains stable code
 - GUI development was completed on the `gui-development` branch
 - Final version merged into main
+- Full .git history included in submission
