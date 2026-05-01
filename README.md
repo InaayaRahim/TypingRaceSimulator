@@ -55,6 +55,8 @@ javac --module-path /path/to/javafx-sdk/lib \
 Part2/*.java
 ```
 
+Replace /path/to/javafx-sdk/lib with your local JavaFX SDK path.
+
 ### How to run
 
 ```bash
@@ -62,6 +64,9 @@ java --module-path /path/to/javafx-sdk/lib \
 --add-modules javafx.controls \
 -cp bin Part2.MainGUI
 ```
+
+Replace /path/to/javafx-sdk/lib with your local JavaFX SDK path.
+
 ### GUI Entry Point
 
 The GUI can be launched using:
